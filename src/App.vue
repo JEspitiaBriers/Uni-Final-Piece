@@ -88,8 +88,6 @@ onMounted(async () => {
   saleItems.value = SaleItems;
 })
 
-
-const getCurrencySymbol = (locale, currency) => (0).toLocaleString(locale, { style: 'currency', currency, minimumFractionDigits: 0, maximumFractionDigits: 0 }).replace(/\d/g, '').trim()
 let currencyType = ref("GBP")
 function changeCurrency(selectedCurrency) {
   currencyType.value = selectedCurrency

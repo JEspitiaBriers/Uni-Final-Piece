@@ -43,8 +43,20 @@ let chosenColour = ref("Black")
 
 let subTab = ref("Specification")
 function changeSubTab(e) {
-  subTab.value = e.
+  subTab.value = e
   console.log(e)
+  console.log(subTab.value)
+}
+
+let quant = ref(0)
+function quantity(value) {
+  if (quant.value == 0 && value == '-1') {
+    quant.value = 0
+  }
+  else {
+    quant.value += Number(value)
+    console.log(quant.value)
+  }
 }
 </script>
 
@@ -67,12 +79,12 @@ function changeSubTab(e) {
           </div>
         </div>
 
-        <div class="col-lg-6">
+        <div class="col-lg-5" style="margin-top: 5px;">
           <h3> {{ item.Title }} </h3> <br>
 
           <div class="mb-3">
-          <span class="h5">{{ ((item.Price * currencyRate) - (item.Price * currencyRate *
-            discount)).toLocaleString(undefined, { style: "currency", currency: currencyType }) }}</span>
+            <span class="h5">{{ ((item.Price * currencyRate) - (item.Price * currencyRate *
+              discount)).toLocaleString(undefined, { style: "currency", currency: currencyType }) }}</span>
             <span class="text-muted">/unit</span>
           </div>
 
@@ -97,14 +109,15 @@ function changeSubTab(e) {
           <hr />
 
           <div class="row mb-4">
-            <div class="col-md-4 col-6">
-              <label class="mb-2">Colour</label>
-              <select class="form-select border border-secondary" v-model="chosenColour" style="height: 35px;">
-                <option value="Black">Black</option>
-                <option v-if="item.Categories == 'Enclosures'" value="Wood-Brown">Wood-Brown</option>
-                <option v-if="item.Categories == 'Enclosures'" value="White">White</option>
+            <div class="col-md-4 col-6 mb-3">
+            <label class="mb-2">Colour</label>
+            <select class="form-select border border-secondary" v-model="chosenColour"
+              style="height: 35px; width: 120px;">
+              <option value="Black">Black</option>
+              <option v-if="item.Categories == 'Enclosures'" value="Wood-Brown">Wood-Brown</option>
+              <option v-if="item.Categories == 'Enclosures'" value="White">White</option>
 
-                <option v-if="item.Categories == 'Basking and Hydrating'" value="Natural Rock">Natural Rock</option>
+              <option v-if="item.Categories == 'Basking and Hydrating'" value="Natural Rock">Natural Rock</option>
                 <option v-if="item.Categories == 'Basking and Hydrating'" value="Mossy Log">Mossy Log</option>
                 <option v-if="item.Categories == 'Basking and Hydrating'" value="Sandstone">Sandstone</option>
 
@@ -116,22 +129,32 @@ function changeSubTab(e) {
 
             <div class="col-md-4 col-6 mb-3">
               <label class="mb-2 d-block">Quantity</label>
-              <!-- add stock count to db
-                             -->
-              <div class="input-group mb-3" style="width: 170px;">
-                <button class="btn btn-white quantity" type="button" id="button-addon1"
-                  data-bs-ripple-color="dark"><b>-</b></button>
-                <input type="text" class="form-control text-center border border-secondary" placeholder="14"
-                  aria-label="Example text with button addon" aria-describedby="button-addon1" />
-                <button class="btn btn-white quantity" type="button" id="button-addon2"
-                  data-bs-ripple-color="dark"><b>+</b></button>
+              <!-- add stock count to db -->
+              <div class="input-group mb-3" style="width: 120px;">
+                <button class="btn btn-white quantity" type="button" @click="quantity('-1')"><b>-</b></button>
+                <input type="text" class="form-control text-center border border-secondary" :value="quant" />
+                <button class="btn btn-white quantity" type="button" @click="quantity('1')"><b>+</b></button>
+              </div>
+            </div>
+
+            <div class="col-md-4 col-6 mb-3">
+              <label class="mb-2 d-block">Sub-total</label>
+              <!-- add stock count to db -->
+              <div class="input-group mb-3" style="width: 120px;">
+                <input type="text" class="form-control text-center border border-secondary" :value="((item.Price * currencyRate * quant) - (item.Price * currencyRate *
+                  (discount * quant))).toLocaleString(undefined, { style: 'currency', currency: currencyType })" />
               </div>
             </div>
             <div class="col-md-6">
-              <a href="#" class="btn btn-success" style="margin-right:5px"> Add to Basket </a>
-              <a href="#" class="btn btn-primary"> Save to Wishlist </a>
+              <a class="btn btn-success" style="margin-right:5px"> Add to Basket </a>
+              <a class="btn btn-primary" style="margin-right:5px"> Save to Wishlist </a>
             </div>
           </div>
+        </div>
+
+        <div id="productRecs">
+          <p>Lets write something here to see if its working now</p>
+          
         </div>
       </div>
       <!-- content -->
@@ -200,22 +223,22 @@ function changeSubTab(e) {
                         </ul>
                       </div>
                       <div class="col-12 col-md-6 mb-0">
-                        <ul class="list-unstyled">
-                          <li><i class="fas fa-check text-success me-2"></i>Easy fast and ver good</li>
-                          <li><i class="fas fa-check text-success me-2"></i>Some great feature name here</li>
-                          <li><i class="fas fa-check text-success me-2"></i>Modern style and design</li>
-                        </ul>
-                      </div>
+                      <ul class="list-unstyled">
+                        <li><i class="fas fa-check text-success me-2"></i>Easy fast and ver good</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Some great feature name here</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Modern style and design</li>
+                      </ul>
                     </div>
-                    <table class="table border mt-3 mb-2">
-                      <tr>
-                        <th class="py-2">Display:</th>
-                        <td class="py-2">13.3-inch LED-backlit display with IPS</td>
-                      </tr>
-                      <tr>
-                        <th class="py-2">Processor capacity:</th>
-                        <td class="py-2">2.3GHz dual-core Intel Core i5</td>
-                      </tr>
+                  </div>
+                  <table class="table border mt-3 mb-2">
+                    <tr>
+                      <th class="py-2">Display:</th>
+                      <td class="py-2">13.3-inch LED-backlit display with IPS</td>
+                    </tr>
+                    <tr>
+                      <th class="py-2">Processor capacity:</th>
+                      <td class="py-2">2.3GHz dual-core Intel Core i5</td>
+                    </tr>
                     <tr>
                       <th class="py-2">Camera quality:</th>
                       <td class="py-2">720p FaceTime HD camera</td>
@@ -261,59 +284,60 @@ function changeSubTab(e) {
 
             </div>
           </div>
-          <!--
-            <div class="col-lg-4">
-              <div class="px-0 border rounded-2 shadow-0">
-                <div class="card">
-                  <div class="card-body">
-                    <h5 class="card-title">Similar items</h5>
-                    <div class="d-flex mb-3">
-                      <a href="#" class="me-3">
-                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp"
-                          style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                      </a>
-                      <div class="info">
-                        <a href="#" class="nav-link mb-1">
-                          Rucksack Backpack Large <br />
-                          Line Mounts
+            <!--
+              <div class="col-lg-4">
+                <div class="px-0 border rounded-2 shadow-0">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">Similar items</h5>
+                      <div class="d-flex mb-3">
+                        <a href="#" class="me-3">
+                          <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp"
+                            style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
                         </a>
-                            <strong class="text-dark"> $38.90</strong>
-                          </div>
-                              </div>
-
-                          <div class="d-flex mb-3">
-                            <a href="#" class="me-3">
-                              <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/9.webp"
-                                style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                            </a>
-                            <div class="info">
-                              <a href="#" class="nav-link mb-1">
-                                Summer New Men's Denim <br />
-                                Jeans Shorts
-                              </a>
-                              <strong class="text-dark"> $29.50</strong>
+                        <div class="info">
+                          <a href="#" class="nav-link mb-1">
+                            Rucksack Backpack Large <br />
+                            Line Mounts
+                          </a>
+                              <strong class="text-dark"> $38.90</strong>
                             </div>
-                          </div>
-
-                          <div class="d-flex mb-3">
-                            <a href="#" class="me-3">
-                              <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/10.webp"
-                                style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                            </a>
-                            <div class="info">
-                              <a href="#" class="nav-link mb-1"> T-shirts with multiple colors, for men and lady </a>
-                                <strong class="text-dark"> $120.00</strong>
                                 </div>
-                              </div>
 
-                              <div class="d-flex">
-                                <a href="#" class="me-3">
-                                  <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp"
-                                    style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+                            <div class="d-flex mb-3">
+                              <a href="#" class="me-3">
+                                <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/9.webp"
+                                  style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+                              </a>
+                              <div class="info">
+                                <a href="#" class="nav-link mb-1">
+                                  Summer New Men's Denim <br />
+                                  Jeans Shorts
                                 </a>
-                                <div class="info">
-                                  <a href="#" class="nav-link mb-1"> Blazer Suit Dress Jacket for Men, Blue color </a>
-                                  <strong class="text-dark"> $339.90</strong>
+                                <strong class="text-dark"> $29.50</strong>
+                              </div>
+                            </div>
+
+                            <div class="d-flex mb-3">
+                              <a href="#" class="me-3">
+                                <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/10.webp"
+                                  style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+                              </a>
+                              <div class="info">
+                                <a href="#" class="nav-link mb-1"> T-shirts with multiple colors, for men and lady </a>
+                                  <strong class="text-dark"> $120.00</strong>
+                                  </div>
+                                </div>
+
+                                <div class="d-flex">
+                                  <a href="#" class="me-3">
+                                    <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp"
+                                      style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+                                  </a>
+                                  <div class="info">
+                                    <a href="#" class="nav-link mb-1"> Blazer Suit Dress Jacket for Men, Blue color </a>
+                                    <strong class="text-dark"> $339.90</strong>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -321,8 +345,7 @@ function changeSubTab(e) {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </section> -->
+                  </section> -->
           </div>
         </div>
       </div>
@@ -363,5 +386,23 @@ function changeSubTab(e) {
 
 .subNav {
   border-radius: 2px;
+}
+
+@media screen and (max-width: 768px) {
+  #productRecs {
+    border: solid 1px lightgrey;
+    border-radius: 15px;
+    padding-left: 25px;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 769px) {
+  #productRecs {
+    border: solid 1px lightgrey;
+    border-radius: 15px;
+    width: 16.666%;
+    padding-left: 5px;
+  }
 }
 </style>
