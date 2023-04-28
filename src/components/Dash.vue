@@ -215,7 +215,7 @@ function filterResults() {
                   </div>
                   <!-- add all checkboxes to form so they can be submitted -->
                   <button type="button" class="btn btn-white w-100 border border-secondary"
-                    @click="filterCategories()">apply</button>
+                    @click="filterCategories()">Apply</button>
                 </div>
               </div>
               <div class="accordion-item">
@@ -269,7 +269,7 @@ function filterResults() {
                     </div>
                     <!-- add all checkboxes to form so they can be submitted -->
                     <button type="button" class="btn btn-white w-100 border border-secondary"
-                      @click="filterSizes()">apply</button>
+                      @click="filterSizes()">Apply</button>
                   </div>
                 </div>
               </div>
@@ -306,7 +306,7 @@ function filterResults() {
                     </div>
                     <p>{{ priceInputErrorMessage }}</p>
                     <button type="button" class="btn btn-white w-100 border border-secondary"
-                      @click="checkPriceInputs()">apply</button>
+                      @click="checkPriceInputs()">Apply</button>
                   </div>
                 </div>
               </div>
@@ -359,7 +359,7 @@ function filterResults() {
                     </div>
                     <!-- add all checkboxes to form so they can be submitted -->
                     <button type="button" class="btn btn-white w-100 border border-secondary"
-                      @click="filterResults()">apply</button>
+                      @click="filterResults()">Apply</button>
                   </div>
                 </div>
               </div>
@@ -405,7 +405,7 @@ function filterResults() {
 
               <div class="col-lg-4 col-md-6 col-sm-6 d-flex">
                 <div class="card w-100 my-2 shadow-2-strong">
-                  <!-- <img :src="item.ImageMain" :alt="item.Alt" class="card-img-top" /> -->
+                  <img :src="item.ImageMain" :alt="item.Alt" class="card-img-top" />
                   <div class="card-body d-flex flex-column">
                     <div class="d-flex flex-row">
                       <h5 class="mb-1 me-1"><router-link
