@@ -46,6 +46,24 @@ function changeSubTab(e) {
   subTab.value = e
   console.log(e)
   console.log(subTab.value)
+
+  if (subTab.value == "Specification") {
+    message.value = item.description + "\n" + item.dimensions
+  }
+  else if (subTab.value == "Delivery") {
+    message.value = "Delivery available by "
+  }
+  else {
+    message.value = "This is reviews"
+  }
+}
+
+function addToBasket() {
+  console.log("added to basket: " + item.value.Title)
+}
+
+function buyNow() {
+  router.push("/payment")
 }
 
 let quant = ref(0)
@@ -118,92 +136,61 @@ function quantity(value) {
               <option v-if="item.Categories == 'Enclosures'" value="White">White</option>
 
               <option v-if="item.Categories == 'Basking and Hydrating'" value="Natural Rock">Natural Rock</option>
-                <option v-if="item.Categories == 'Basking and Hydrating'" value="Mossy Log">Mossy Log</option>
-                <option v-if="item.Categories == 'Basking and Hydrating'" value="Sandstone">Sandstone</option>
+              <option v-if="item.Categories == 'Basking and Hydrating'" value="Mossy Log">Mossy Log</option>
+              <option v-if="item.Categories == 'Basking and Hydrating'" value="Sandstone">Sandstone</option>
 
-                <option v-if="item.Categories == 'Bedding and Substrate'" value="Sandy">Sandy</option>
-                <option v-if="item.Categories == 'Bedding and Substrate'" value="Dirty">Dirty</option>
-                <option v-if="item.Categories == 'Bedding and Substrate'" value="Dark Shaving">Dark Shaving</option>
-              </select>
-            </div>
+              <option v-if="item.Categories == 'Bedding and Substrate'" value="Sandy">Sandy</option>
+              <option v-if="item.Categories == 'Bedding and Substrate'" value="Dirty">Dirty</option>
+              <option v-if="item.Categories == 'Bedding and Substrate'" value="Dark Shaving">Dark Shaving</option>
+            </select>
+          </div>
 
-            <div class="col-md-4 col-6 mb-3">
-              <label class="mb-2 d-block">Quantity</label>
-              <!-- add stock count to db -->
-              <div class="input-group mb-3" style="width: 120px;">
-                <button class="btn btn-white quantity" type="button" @click="quantity('-1')"><b>-</b></button>
-                <input type="text" class="form-control text-center border border-secondary" :value="quant" />
-                <button class="btn btn-white quantity" type="button" @click="quantity('1')"><b>+</b></button>
-              </div>
-            </div>
-
-            <div class="col-md-4 col-6 mb-3">
-              <label class="mb-2 d-block">Sub-total</label>
-              <!-- add stock count to db -->
-              <div class="input-group mb-3" style="width: 120px;">
-                <input type="text" class="form-control text-center border border-secondary" :value="((item.Price * currencyRate * quant) - (item.Price * currencyRate *
-                  (discount * quant))).toLocaleString(undefined, { style: 'currency', currency: currencyType })" />
-              </div>
-            </div>
-            <div class="col-md-6">
-              <a class="btn btn-success" style="margin-right:5px"> Add to Basket </a>
-              <a class="btn btn-primary" style="margin-right:5px"> Save to Wishlist </a>
+          <div class="col-md-4 col-6 mb-3">
+            <label class="mb-2 d-block">Quantity</label>
+            <!-- add stock count to db -->
+            <div class="input-group mb-3" style="width: 120px;">
+              <button class="btn btn-white quantity" type="button" @click="quantity('-1')"><b>-</b></button>
+              <input type="text" class="form-control text-center border border-secondary" :value="quant" />
+              <button class="btn btn-white quantity" type="button" @click="quantity('1')"><b>+</b></button>
             </div>
           </div>
-        </div>
 
-        <div id="productRecs">
-          <p>Lets write something here to see if its working now</p>
-          
+          <div class="col-md-4 col-6 mb-3">
+            <label class="mb-2 d-block">Sub-total</label>
+            <!-- add stock count to db -->
+            <div class="input-group mb-3" style="width: 120px;">
+              <input type="text" class="form-control text-center border border-secondary" :value="((item.Price * currencyRate * quant) - (item.Price * currencyRate *
+                (discount * quant))).toLocaleString(undefined, { style: 'currency', currency: currencyType })" />
+            </div>
+          </div>
+          <div class="col-md-7">
+            <a class="btn btn-success" style="margin-right:5px" @click="buyNow()"> Buy Now </a>
+            <a class="btn btn-primary" style="margin-right:5px" @click="addToBasket()"> Add to Basket </a>
+          </div>
         </div>
       </div>
-      <!-- content -->
+
+      <div id="productRecs">
+        <p>Lets write something here to see if its working now</p>
+
+      </div>
+    </div>
+    <!-- content -->
 
       <div id="productBottom">
-        <div class="container">
-          <div class="row gx-4">
-            <div class="col-lg-4 mb-8"></div>
-            <div class="col-lg-8 mb-4">
-              <div class="border rounded-2 px-3 py-2 bg-white">
+      <div class="container">
+        <div class="row gx-4">
+          <div class="col-lg-4 mb-8"></div>
+          <div class="col-lg-8 mb-4">
+            <div class="border rounded-2 px-3 py-2 bg-white">
 
-                <div class="input-group" @change="changeSubTab($event.target.value)">
-                  <input type="radio" class="btn-check">
-                  <label class="btn btn-secondary" value="Specification">Specification</label>
-                  <input type="radio" class="btn-check">
-                  <label class="btn btn-secondary" value="">Something</label>
-                  <input type="radio" class="btn-check">
-                  <label class="btn btn-secondary" value="Something Else">Something Else</label>
-                  <input type="radio" class="btn-check">
-                  <label class="btn btn-secondary" for="option4">Something Else 2</label>
-                </div>
-
-
-                <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-                  <li class="nav-item d-flex" role="presentation">
-                    <a class="nav-link d-flex align-items-center justify-content-center w-100 active" id="ex1-tab-1"
-                      data-bs-toggle="pill" href="#ex1-pills-1" role="tab" aria-controls="ex1-pills-1"
-                      aria-selected="true">Specification</a>
-                  </li>
-                  <li class="nav-item d-flex" role="presentation">
-                    <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-2"
-                      data-bs-toggle="pill" href="#ex1-pills-2" role="tab" aria-controls="ex1-pills-2"
-                      aria-selected="false">Warranty info</a>
-                  </li>
-                  <li class="nav-item d-flex" role="presentation">
-                    <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-3"
-                      data-bs-toggle="pill" href="#ex1-pills-3" role="tab" aria-controls="ex1-pills-3"
-                      aria-selected="false">Shipping info</a>
-                  </li>
-                  <div v-if="item.Categories == 'Bedding and Substrate'">
-                    <li class="nav-item d-flex" role="presentation">
-                      <a class="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-4"
-                        data-bs-toggle="pill" href="#ex1-pills-4" role="tab" aria-controls="ex1-pills-4"
-                        aria-selected="false">Choosing your substrate</a>
-                    </li>
-                  </div>
-                </ul>
-
-                <div class="tab-content" id="ex1-content">
+              <div class="btn-group" role="group">
+                <button type="button" class="btn btn-primary" @click="changeSubTab($event.target.value)">Specification</button>
+                <button type="button" class="btn btn-primary" @click="changeSubTab($event.target.value)">Reviews</button>
+                <button type="button" class="btn btn-primary" @click="changeSubTab($event.target.value)">Delivery</button>
+              </div>
+              <div id="subNavPage"> {{ message }}</div>
+              <!-- <div class="tab-content" id="ex1-content">
                   <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
                     <p>
                       With supporting text below as a natural lead-in to additional content. Lorem ipsum dolor sit amet,
@@ -218,11 +205,11 @@ function quantity(value) {
                         <ul class="list-unstyled mb-0">
                           <li><i class="fas fa-check text-success me-2"></i>Some great feature name here</li>
                           <li><i class="fas fa-check text-success me-2"></i>Lorem ipsum dolor sit amet, consectetur</li>
-                          <li><i class="fas fa-check text-success me-2"></i>Duis aute irure dolor in reprehenderit</li>
-                          <li><i class="fas fa-check text-success me-2"></i>Optical heart sensor</li>
-                        </ul>
-                      </div>
-                      <div class="col-12 col-md-6 mb-0">
+                            <li><i class="fas fa-check text-success me-2"></i>Duis aute irure dolor in reprehenderit</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Optical heart sensor</li>
+                          </ul>
+                        </div>
+                        <div class="col-12 col-md-6 mb-0">
                       <ul class="list-unstyled">
                         <li><i class="fas fa-check text-success me-2"></i>Easy fast and ver good</li>
                         <li><i class="fas fa-check text-success me-2"></i>Some great feature name here</li>
@@ -252,8 +239,8 @@ function quantity(value) {
                       <td class="py-2">Intel Iris Plus Graphics 640</td>
                     </tr>
                   </table>
-                </div>
-                <div class="tab-pane fade mb-2" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
+                </div> -->
+              <!-- <div class="tab-pane fade mb-2" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
                   Tab content or sample information now <br />
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
                   et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -279,77 +266,77 @@ function quantity(value) {
                   aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
                   dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
                   officia deserunt mollit anim id est laborum.
-                </div>
-              </div>
-
+                </div> -->
             </div>
+
           </div>
-            <!--
-              <div class="col-lg-4">
-                <div class="px-0 border rounded-2 shadow-0">
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title">Similar items</h5>
-                      <div class="d-flex mb-3">
-                        <a href="#" class="me-3">
-                          <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp"
-                            style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                        </a>
-                        <div class="info">
-                          <a href="#" class="nav-link mb-1">
-                            Rucksack Backpack Large <br />
-                            Line Mounts
-                          </a>
-                              <strong class="text-dark"> $38.90</strong>
-                            </div>
-                                </div>
-
-                            <div class="d-flex mb-3">
-                              <a href="#" class="me-3">
-                                <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/9.webp"
-                                  style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+        </div>
+          <!--
+                  <div class="col-lg-4">
+                    <div class="px-0 border rounded-2 shadow-0">
+                      <div class="card">
+                        <div class="card-body">
+                          <h5 class="card-title">Similar items</h5>
+                          <div class="d-flex mb-3">
+                            <a href="#" class="me-3">
+                              <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/8.webp"
+                                style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+                            </a>
+                            <div class="info">
+                              <a href="#" class="nav-link mb-1">
+                                Rucksack Backpack Large <br />
+                                Line Mounts
                               </a>
-                              <div class="info">
-                                <a href="#" class="nav-link mb-1">
-                                  Summer New Men's Denim <br />
-                                  Jeans Shorts
-                                </a>
-                                <strong class="text-dark"> $29.50</strong>
-                              </div>
-                            </div>
-
-                            <div class="d-flex mb-3">
-                              <a href="#" class="me-3">
-                                <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/10.webp"
-                                  style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
-                              </a>
-                              <div class="info">
-                                <a href="#" class="nav-link mb-1"> T-shirts with multiple colors, for men and lady </a>
-                                  <strong class="text-dark"> $120.00</strong>
-                                  </div>
+                                  <strong class="text-dark"> $38.90</strong>
                                 </div>
+                                    </div>
 
-                                <div class="d-flex">
+                                <div class="d-flex mb-3">
                                   <a href="#" class="me-3">
-                                    <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp"
+                                    <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/9.webp"
                                       style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
                                   </a>
                                   <div class="info">
-                                    <a href="#" class="nav-link mb-1"> Blazer Suit Dress Jacket for Men, Blue color </a>
-                                    <strong class="text-dark"> $339.90</strong>
+                                    <a href="#" class="nav-link mb-1">
+                                      Summer New Men's Denim <br />
+                                      Jeans Shorts
+                                    </a>
+                                    <strong class="text-dark"> $29.50</strong>
+                                  </div>
+                                </div>
+
+                                <div class="d-flex mb-3">
+                                  <a href="#" class="me-3">
+                                    <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/10.webp"
+                                      style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+                                  </a>
+                                  <div class="info">
+                                    <a href="#" class="nav-link mb-1"> T-shirts with multiple colors, for men and lady </a>
+                                      <strong class="text-dark"> $120.00</strong>
+                                      </div>
+                                    </div>
+
+                                    <div class="d-flex">
+                                      <a href="#" class="me-3">
+                                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/11.webp"
+                                          style="min-width: 96px; height: 96px;" class="img-md img-thumbnail" />
+                                      </a>
+                                      <div class="info">
+                                        <a href="#" class="nav-link mb-1"> Blazer Suit Dress Jacket for Men, Blue color </a>
+                                        <strong class="text-dark"> $339.90</strong>
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  </section> -->
-          </div>
+                      </section> -->
         </div>
       </div>
     </div>
+    <!-- </div> -->
     <div v-else>
       Loading...
     </div>

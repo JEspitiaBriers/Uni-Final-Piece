@@ -57,6 +57,11 @@ const router = createRouter({
       path: '/MUsers',
       name: 'ManageUsers',
       component: () => import('../components/ManageUsers.vue')
+    },
+    {
+      path: '/payment',
+      name: 'Payment',
+      component: () => import('../components/Payment.vue')
     }
   ]
 });
