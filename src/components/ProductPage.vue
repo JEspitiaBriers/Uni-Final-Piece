@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { firebaseFireStore } from '@/firebase/database'
-import { collection, getDoc, doc } from 'firebase/firestore';
+import { collection, getDoc, getDocs, doc, where, limit } from 'firebase/firestore';
 
 let variables = defineProps({
   id: {
@@ -23,32 +23,72 @@ console.log(variables.id)
 
 const itemRef = doc(firebaseFireStore, "SaleItems", variables.id);
 let item = ref(null);
+let recArray = ref([])
+
+
+/*  COMMENT 1: 
+const recQuery = await getdocs(collRef, where('Categories', '==', item.value.Categories), limit(6))
+let recItems = []
+recQuery.foreach((doc) => {
+  const recommendation = {
+    id: doc.data().id
+    ImageMain: doc.data().ImageMain,
+    Title: doc.data().Title,
+    Price: doc.data().Price
+  }
+  reqItems.push(recommendation)
+})
+recArray.value = recItems
+*/
 
 onMounted(async () => {
+  console.log(Boolean("false"))
+  console.log(Boolean(false))
+  console.log(false)
+  console.log(Boolean(true))
+  console.log(true)
   try {
     const snapshot = await getDoc(itemRef);
     if (snapshot.exists()) {
       item.value = snapshot.data()
-      console.log("success" + item.value)
+      console.log("-- success --")
+      
     } else {
       console.log("Document does not exist")
     }
-
   } catch (error) {
     console.log(error)
   }
+
+  console.log(item.value)
+  console.log(item.value.Categories)
+  const recQuery = await getDocs(collection(firebaseFireStore, "SaleItems"), where('Categories', '==', "'" + item.value.Categories + "'"), limit(3))
+  let recItems = []
+  recQuery.forEach((doc) => {
+    const recommendation = {
+      id: doc.id,
+      ImageMain: doc.data().ImageMain,
+      Title: doc.data().Title,
+      Price: doc.data().Price
+    }
+    recItems.push(recommendation)
+  })
+  recArray.value = recItems
+  console.log('recArray.value')
+  console.log(recArray.value)
 })
 
 let chosenColour = ref("Black")
 
-let subTab = ref("Specification")
+let subTab = ref("Description")
+let message = ref('')
 function changeSubTab(e) {
   subTab.value = e
-  console.log(e)
   console.log(subTab.value)
 
-  if (subTab.value == "Specification") {
-    message.value = item.description + "\n" + item.dimensions
+  if (subTab.value == "Description") {
+    // message.value = item.value.Description + item.value.Dimensions
+    document.getElementById('subNavPage').innerHTML = "<p>Item Description</p><p>" + item.value.Description + "</p>"
   }
   else if (subTab.value == "Delivery") {
     message.value = "Delivery available by "
@@ -128,149 +168,97 @@ function quantity(value) {
 
           <div class="row mb-4">
             <div class="col-md-4 col-6 mb-3">
-            <label class="mb-2">Colour</label>
-            <select class="form-select border border-secondary" v-model="chosenColour"
-              style="height: 35px; width: 120px;">
-              <option value="Black">Black</option>
-              <option v-if="item.Categories == 'Enclosures'" value="Wood-Brown">Wood-Brown</option>
-              <option v-if="item.Categories == 'Enclosures'" value="White">White</option>
+              <label class="mb-2">Colour</label>
+              <select class="form-select border border-secondary" v-model="chosenColour"
+                style="height: 35px; width: 120px;">
+                <option value="Black">Black</option>
+                <option v-if="item.Categories == 'Enclosures'" value="Wood-Brown">Wood-Brown</option>
+                <option v-if="item.Categories == 'Enclosures'" value="White">White</option>
 
-              <option v-if="item.Categories == 'Basking and Hydrating'" value="Natural Rock">Natural Rock</option>
-              <option v-if="item.Categories == 'Basking and Hydrating'" value="Mossy Log">Mossy Log</option>
-              <option v-if="item.Categories == 'Basking and Hydrating'" value="Sandstone">Sandstone</option>
+                <option v-if="item.Categories == 'Basking and Hydrating'" value="Natural Rock">Natural Rock</option>
+                <option v-if="item.Categories == 'Basking and Hydrating'" value="Mossy Log">Mossy Log</option>
+                <option v-if="item.Categories == 'Basking and Hydrating'" value="Sandstone">Sandstone</option>
 
-              <option v-if="item.Categories == 'Bedding and Substrate'" value="Sandy">Sandy</option>
-              <option v-if="item.Categories == 'Bedding and Substrate'" value="Dirty">Dirty</option>
-              <option v-if="item.Categories == 'Bedding and Substrate'" value="Dark Shaving">Dark Shaving</option>
-            </select>
-          </div>
+                <option v-if="item.Categories == 'Bedding and Substrate'" value="Sandy">Sandy</option>
+                <option v-if="item.Categories == 'Bedding and Substrate'" value="Dirty">Dirty</option>
+                <option v-if="item.Categories == 'Bedding and Substrate'" value="Dark Shaving">Dark Shaving</option>
+              </select>
+            </div>
 
-          <div class="col-md-4 col-6 mb-3">
-            <label class="mb-2 d-block">Quantity</label>
-            <!-- add stock count to db -->
-            <div class="input-group mb-3" style="width: 120px;">
-              <button class="btn btn-white quantity" type="button" @click="quantity('-1')"><b>-</b></button>
-              <input type="text" class="form-control text-center border border-secondary" :value="quant" />
-              <button class="btn btn-white quantity" type="button" @click="quantity('1')"><b>+</b></button>
+            <div class="col-md-4 col-6 mb-3">
+              <label class="mb-2 d-block">Quantity</label>
+              <!-- add stock count to db -->
+              <div class="input-group mb-3" style="width: 120px;">
+                <button class="btn btn-white quantity" type="button" @click="quantity('-1')"><b>-</b></button>
+                <input type="text" class="form-control text-center border border-secondary" :value="quant" />
+                <button class="btn btn-white quantity" type="button" @click="quantity('1')"><b>+</b></button>
+              </div>
+            </div>
+
+            <div class="col-md-5 col-6 mb-3">
+              <label class="mb-2 d-block">Sub-total</label>
+              <!-- add stock count to db -->
+              <div class="input-group mb-3" style="width: 120px;">
+                <input type="text" class="form-control text-center border border-secondary" :value="((item.Price * currencyRate * quant) - (item.Price * currencyRate *
+                  (discount * quant))).toLocaleString(undefined, { style: 'currency', currency: currencyType })" />
+              </div>
+            </div>
+            <div class="col-md-7">
+              <a class="btn btn-success" style="margin-right:5px" @click="buyNow()"> Buy Now </a>
+              <a class="btn btn-primary" style="margin-right:5px" @click="addToBasket()"> Add to Basket </a>
             </div>
           </div>
+        </div>
 
-          <div class="col-md-4 col-6 mb-3">
-            <label class="mb-2 d-block">Sub-total</label>
-            <!-- add stock count to db -->
-            <div class="input-group mb-3" style="width: 120px;">
-              <input type="text" class="form-control text-center border border-secondary" :value="((item.Price * currencyRate * quant) - (item.Price * currencyRate *
-                (discount * quant))).toLocaleString(undefined, { style: 'currency', currency: currencyType })" />
+        <div class="row" id="productRecs">
+          <p>
+            Lets write something here to see if its working now
+            <!-- See Script COMMMENT 1 for getDocs()
+            <div v-for="recommendations in recArray">
+              bootsrap card with product image, title and price
+            </div> -->
+
+      <div class="row flex-nowrap overflow-auto">
+        <div class="col-6 col-md-2" v-for="recommendation in recArray" :key="recommendation.id">
+          <div class="card w-20">
+            <img :src="recommendation.ImageMain" :alt="recommendation.Alt" class="card-img-top" />
+            <div class="card-body d-flex flex-column">
+              <div class="d-flex flex-row">
+                <h5 class="mb-1 me-1"><router-link
+                  :to="{ name: 'Product', params: { id: recommendation.id, currencyRate: currencyRate, currencyType: currencyType } }">{{
+                  recommendation.Title }}</router-link></h5>
+                <br>
+                <h6>{{ (recommendation.Price * currencyRate).toLocaleString(
+                  undefined, { style: "currency", currency: currencyType })
+                }}</h6>
+              </div>
             </div>
-          </div>
-          <div class="col-md-7">
-            <a class="btn btn-success" style="margin-right:5px" @click="buyNow()"> Buy Now </a>
-            <a class="btn btn-primary" style="margin-right:5px" @click="addToBasket()"> Add to Basket </a>
           </div>
         </div>
       </div>
+          </p>
 
-      <div id="productRecs">
-        <p>Lets write something here to see if its working now</p>
-
+        </div>
       </div>
-    </div>
-    <!-- content -->
+      <!-- content -->
 
       <div id="productBottom">
-      <div class="container">
-        <div class="row gx-4">
-          <div class="col-lg-4 mb-8"></div>
-          <div class="col-lg-8 mb-4">
-            <div class="border rounded-2 px-3 py-2 bg-white">
+        <div class="container">
+          <div class="row gx-4">
+            <div class="col-lg-4 mb-8"></div>
+            <div class="col-lg-8 mb-4">
+              <div class="border rounded-2 px-3 py-2 bg-white">
 
-              <div class="btn-group" role="group">
-                <button type="button" class="btn btn-primary" @click="changeSubTab($event.target.value)">Specification</button>
-                <button type="button" class="btn btn-primary" @click="changeSubTab($event.target.value)">Reviews</button>
-                <button type="button" class="btn btn-primary" @click="changeSubTab($event.target.value)">Delivery</button>
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-primary" @click="changeSubTab('Description')">Description</button>
+                  <button type="button" class="btn btn-primary" @click="changeSubTab('Reviews')">Reviews</button>
+                  <button type="button" class="btn btn-primary" @click="changeSubTab('Delivery')">Delivery</button>
+                </div>
+                <div id="subNavPage"></div>
               </div>
-              <div id="subNavPage"> {{ message }}</div>
-              <!-- <div class="tab-content" id="ex1-content">
-                  <div class="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
-                    <p>
-                      With supporting text below as a natural lead-in to additional content. Lorem ipsum dolor sit amet,
-                      consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                      enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                      nulla
-                      pariatur.
-                    </p>
-                    <div class="row mb-2">
-                      <div class="col-12 col-md-6">
-                        <ul class="list-unstyled mb-0">
-                          <li><i class="fas fa-check text-success me-2"></i>Some great feature name here</li>
-                          <li><i class="fas fa-check text-success me-2"></i>Lorem ipsum dolor sit amet, consectetur</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Duis aute irure dolor in reprehenderit</li>
-                            <li><i class="fas fa-check text-success me-2"></i>Optical heart sensor</li>
-                          </ul>
-                        </div>
-                        <div class="col-12 col-md-6 mb-0">
-                      <ul class="list-unstyled">
-                        <li><i class="fas fa-check text-success me-2"></i>Easy fast and ver good</li>
-                        <li><i class="fas fa-check text-success me-2"></i>Some great feature name here</li>
-                        <li><i class="fas fa-check text-success me-2"></i>Modern style and design</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <table class="table border mt-3 mb-2">
-                    <tr>
-                      <th class="py-2">Display:</th>
-                      <td class="py-2">13.3-inch LED-backlit display with IPS</td>
-                    </tr>
-                    <tr>
-                      <th class="py-2">Processor capacity:</th>
-                      <td class="py-2">2.3GHz dual-core Intel Core i5</td>
-                    </tr>
-                    <tr>
-                      <th class="py-2">Camera quality:</th>
-                      <td class="py-2">720p FaceTime HD camera</td>
-                    </tr>
-                    <tr>
-                      <th class="py-2">Memory</th>
-                      <td class="py-2">8 GB RAM or 16 GB RAM</td>
-                    </tr>
-                    <tr>
-                      <th class="py-2">Graphics</th>
-                      <td class="py-2">Intel Iris Plus Graphics 640</td>
-                    </tr>
-                  </table>
-                </div> -->
-              <!-- <div class="tab-pane fade mb-2" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
-                  Tab content or sample information now <br />
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-                  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                  aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-                  officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                  sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                  nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                </div>
-                <div class="tab-pane fade mb-2" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
-                  Another tab content or sample information now <br />
-                  Dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                  magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                  commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                  fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                  deserunt
-                  mollit anim id est laborum.
-                </div>
-                <div class="tab-pane fade mb-2" id="ex1-pills-4" role="tabpanel" aria-labelledby="ex1-tab-4">
-                  Some other tab content or sample information now <br />
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-                  et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                  aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-                  officia deserunt mollit anim id est laborum.
-                </div> -->
-            </div>
 
+            </div>
           </div>
-        </div>
           <!--
                   <div class="col-lg-4">
                     <div class="px-0 border rounded-2 shadow-0">
@@ -380,7 +368,6 @@ function quantity(value) {
     border: solid 1px lightgrey;
     border-radius: 15px;
     padding-left: 25px;
-    width: 100%;
   }
 }
 
@@ -388,7 +375,6 @@ function quantity(value) {
   #productRecs {
     border: solid 1px lightgrey;
     border-radius: 15px;
-    width: 16.666%;
     padding-left: 5px;
   }
 }

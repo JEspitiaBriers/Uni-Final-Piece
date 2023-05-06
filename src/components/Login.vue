@@ -1,26 +1,38 @@
 <script setup>
 import { ref } from 'vue'
 
-
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { validateEmail, checkPasswordLength } from '../assets/utils.js'
 
 import { firebaseAuthentication, signInWithEmailAndPassword } from '@/firebase/database'
-import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
 
 import { useRouter } from 'vue-router'
 
-const loginResponse = ref(null)
+const loginMessage = ref(null)
 
 const router = useRouter()
 
-function login(values) {
-  signInWithEmailAndPassword(firebaseAuthentication, values.email, values.password).then(
+function passwordToggle() {
+  var password = document.getElementById("loginPassword");
+  if (password.type === "password") {
+    password.type = "text";
+  } else {
+    password.type = "password";
+  }
+}
+
+function login() {
+  signInWithEmailAndPassword(firebaseAuthentication, document.getElementById('loginEmail').value, document.getElementById('loginEmail').value).then(
     (userCredential) => {
       router.push("/")
     },
     (error) => {
-      loginResponse.value = error.message.substring(error.message.indexOf("/") + 1, error.message.length() - 2)
+      if (error.message.substring(error.message.indexOf("/") + 1, error.message.length - 2) == "internal-error") {
+        loginMessage = "missing-field"
+      }
+      else {
+        loginMessage.value = error.message.substring(error.message.indexOf("/") + 1, error.message.length - 2)
+      }
     }
   )
 }
@@ -31,42 +43,38 @@ function resetPassword() {
 </script>
 
 <template>
-  <main>
-    <Form label-width="50px" class="form-signin" @submit="login">
-      <h2 class="h3 mb-3 fw-normal">Login</h2>
+  <div class="onPage" id="loginPage">
+    <h2 style="text-align: center">Login</h2>
 
-      <div class="form-floating">
-        <Field class="form-control" type="email" placeholder="email" autocomplete="on" name="email"
-          :rules="validateEmail" />
-        <ErrorMessage name="email" />
-        <label for="floatingInput">Email</label>
-      </div>
-      <div class="form-floating">
-        <Field class="form-control" type="password" placeholder="password" autocomplete="off" name="password"
-          :rules="checkPasswordLength" />
-        <ErrorMessage name="password" />
-        <label for="floatingInput">Password</label>
-      </div>
-      <div v-if="loginResponse">
-        <p>{{ loginResponse }}</p>
-      </div>
+    <label>Email</label>
+    <input class="form-control" id="loginEmail" type="email" placeholder="eg. some.fancy@email.com"
+      :rules="validateEmail" />
 
-      <a @click="resetPassword">Reset Password</a>
+    <label>Password</label>
+    <input class="form-control" id="loginPassword" type="password" placeholder="Password" :rules="checkPasswordLength" />
 
-      <button class="w-100 btn btn-lg btn-primary" style="margin: auto">Login</button>
-    </Form>
-  </main>
+    <div class="input-group" style="margin-top: 3px; margin-left: 25%;">
+      <div class="input-group-text">
+        <input type="checkbox" @click="passwordToggle()">
+      </div>
+      <div class="input-group-append">
+        <span class="input-group-text">Show Passwords</span>
+      </div>
+    </div>
+
+    <div v-if="loginMessage" style="text-align: center">{{ loginMessage }}</div>
+
+    <button class="w-100 btn btn-lg btn-primary" style="margin-top: 5px" @click="login()">Login</button>
+    <button class="w-50 btn btn-sm btn-secondary" style="margin: 3px 0px 0px 25%;" @click="resetPassword()">Reset
+      Password</button>
+    <router-link to="/register" style="margin: 0px 0px 0px 34%;">Need to register?</router-link>
+  </div>
 </template>
 
 <style>
-.form-signin {
-  width: 100%;
-  max-width: 300px;
-  padding-top: 70px;
+#loginPage {
   margin: auto;
-}
-
-label {
-  color: #477979;
+  width: 30%;
+  display: block;
 }
 </style>

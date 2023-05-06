@@ -53,7 +53,7 @@ function home() {
 
 const userItems = ref([])
 onMounted(async () => {
-  const querySnapshot = await getDocs(collection(firebaseFireStore, "Users"));
+  const querySnapshot = await getDocs(collection(firebaseFireStore, "Users"))
   let fbUsers = [];
   querySnapshot.forEach((doc) => {
     const user = {
@@ -63,14 +63,14 @@ onMounted(async () => {
       Email: doc.data().Email,
       DOB: doc.data().DOB
     }
-    fbUsers.push(user);
+    fbUsers.push(user)
   })
-  userItems.value = fbUsers;
+  userItems.value = fbUsers
 })
 
 const saleItems = ref([])
 onMounted(async () => {
-  const querySnapshot = await getDocs(collection(firebaseFireStore, "SaleItems"));
+  const querySnapshot = await getDocs(collection(firebaseFireStore, "SaleItems"))
   let SaleItems = [];
   querySnapshot.forEach((doc) => {
     const saleItem = {
@@ -83,9 +83,9 @@ onMounted(async () => {
       ImageMain: doc.data().ImageMain,
       Images: doc.data().Images,
     }
-    SaleItems.push(saleItem);
+    SaleItems.push(saleItem)
   })
-  saleItems.value = SaleItems;
+  saleItems.value = SaleItems
 })
 
 let currencyType = ref("GBP")

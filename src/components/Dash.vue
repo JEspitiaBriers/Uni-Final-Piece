@@ -24,6 +24,8 @@ let variables = defineProps({
   }
 })
 
+let itemsFound = variables.saleItems.length
+
 let myHeaders = new Headers();
 myHeaders.append("apikey", "wFtoAuudktssS0qgvj1oSNZ2Uy0qsUMI"); //encrypt the key
 
@@ -65,8 +67,6 @@ async function getCurrentRate(currencyType) {
   }
 }
 
-let discount = 0.1
-
 //Search variables/functions
 let searchTerm = ref("")
 
@@ -78,25 +78,43 @@ function changeSearch(searchTermInput) {
 //Category filter variables/functions
 let categoriesSelected = ref([])
 
-function filterCategories(e) {
-  // if (e == checked){
-  //   categoriesSelected.push = e
-  // }
-  // if (e == unchecked) {
-  //   categoriesSelected.splice(indexOf(e), indexOf(e) + 1)
-  // }
+function filterCategories() {
+  let categoryArray = document.getElementsByClassName('categoryCheck')
+  for (let i = 0; i < categoryArray.length; i++){
+    if (categoryArray[i].checked) {
+      let category = (categoryArray[i].id).replace(/([A-Z])/g, ' $1').trim()
+      console.log(category)
+      category = category.substring(0, category.length - 6)
+      categoriesSelected.value.push(category)
+      console.log(categoryArray[i].id + " checked")
+    }
+    else {
+      console.log(categoryArray[i].id + " unchecked")
+    }
+  }
+  console.log(categoriesSelected.value)
+  filterResults()
 }
 
 //Size filter variables/functions
 let sizesSelected = ref([])
 
 function filterSizes(e) {
-  // if (e == checked){
-  //   categoriesSelected.push = e
-  // }
-  // if (e == unchecked) {
-  //   categoriesSelected.splice(indexOf(e), indexOf(e) + 1)
-  // }
+  let sizeArray = document.getElementsByClassName('sizeCheck')
+  for (let i = 0; i < sizeArray.length; i++) {
+    if (sizeArray[i].checked) {
+      let size = (sizeArray[i].id).replace(/([A-Z])/g, ' $1').trim()
+      console.log(size)
+      size = size.substring(0, size.length - 6)
+      sizesSelected.value.push(size)
+      console.log(sizeArray[i].id + " checked")
+    }
+    else {
+      console.log(sizeArray[i].id + " unchecked")
+    }
+  }
+  console.log(sizesSelected.value)
+  filterResults()
 }
 
 //Price filter variables/functions
@@ -106,35 +124,36 @@ let priceInputErrorMessage = ref("")
 
 function checkPriceInputs() {
   console.log("called")
-  console.log("max " + isNaN(maxPriceValue))
-  console.log("max " + maxPriceValue.value)
-  console.log("min " + isNaN(minPriceValue))
-  console.log("min " + minPriceValue.value)
-  if (isNaN(minPriceValue) || isNaN(maxPriceValue)) {
+  if (isNaN(minPriceValue.value) || isNaN(maxPriceValue.value)) {
     priceInputErrorMessage.value = "Inputs must be valid numbers\n(greater than 0)"
-    minPriceValue = "1"
-    maxPriceValue = "1000"
+    minPriceValue.value = "1"
+    maxPriceValue.value = "1000"
     console.log(priceInputErrorMessage)
   }
-  else if (minPriceValue >= maxPriceValue) {
+  else if (minPriceValue.value >= maxPriceValue.value) {
     priceInputErrorMessage.value = "Minimum value cannot be larger than \nor equal to Maximum value"
-    minPriceValue = "0"
-    maxPriceValue = "1000"
+    minPriceValue.value = "0"
+    maxPriceValue.value = "1000"
     console.log(priceInputErrorMessage)
   }
   else {
     priceInputErrorMessage.value = ""
     filterResults()
   }
+}
 
-  /*
-    make the price value * currency via api connect ----------------------------------------------------------------
-  */
+function applyAllFilters() {
+  filterCategories()
+  filterSizes()
+  checkPriceInputs()
+  filterResults()
 }
 
 function filterResults() {
   console.log("This is the filter function, it doesnt do anything yet")
-  console.log(searchTerm, minPriceValue, maxPriceValue)
+  console.log("Search: " + searchTerm.value + "\nMin: " + minPriceValue.value +
+    "\nMax " + maxPriceValue.value + "\nCategories: " + categoriesSelected.value + "\nSizes: " + sizesSelected.value)
+  itemsFound = 0
 }
 </script>
 
@@ -167,48 +186,50 @@ function filterResults() {
           <!-- Collapsible wrapper -->
           <div class="collapse card d-lg-block mb-5" id="saleFilters">
             <div class="accordion" id="saleFiltersSide">
+              <button type="button" class="btn btn-white w-100 border border-secondary"
+                @click="applyAllFilters()">Apply All Filters</button>
               <div class="accordion-item">
                 <h2 class="accordion-header" id="categoriesButton">
                   <button class="accordion-button text-dark bg-light" type="button" data-bs-toggle="collapse"
                     data-bs-target="#categoriesCollapse" aria-expanded="true" aria-controls="categoriesCollapse">
-                    >{{ searchTerm }} Categories
+                    {{ searchTerm }} Categories
                   </button>
                 </h2>
                 <div id="categoriesCollapse" class="accordion-collapse collapse show" aria-labelledby="categoriesButton">
                   <div class="accordion-body">
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="AccessoriesCheck" checked />
+                      <label class="form-check-label" for="AccessoriesCheck">
                         Accessories
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="BaskingAndHydrationCheck" checked />
+                      <label class="form-check-label" for="BaskingAndHydrationCheck">
                         Basking and Hydrating
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="BeddingAndSubstrateCheck" checked />
+                      <label class="form-check-label" for="BeddingAndSubstrateCheck">
                         Bedding and Substrate
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="EnclosureCheck" checked />
+                      <label class="form-check-label" for="EnclosureCheck">
                         Enclosures
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="HeatAndLightCheck" checked />
+                      <label class="form-check-label" for="HeatAndLightCheck">
                         Heat and Light
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="HumidityCheck" checked />
+                      <label class="form-check-label" for="HumidityCheck">
                         Humidity
                       </label>
                     </div>
@@ -231,39 +252,39 @@ function filterResults() {
                   <div class="accordion-body">
                     Area
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <input class="form-check-input sizeCheck" type="checkbox" value="" id="LargeChack" checked />
+                      <label class="form-check-label" for="LargeChack">
                         Large
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <input class="form-check-input sizeCheck" type="checkbox" value="" id="MediumCheck" checked />
+                      <label class="form-check-label" for="MediumCheck">
                         Medium
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <input class="form-check-input sizeCheck" type="checkbox" value="" id="SmallCheck" checked />
+                      <label class="form-check-label" for="SmallCheck">
                         Small
                       </label>
                     </div>
                     Height
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <input class="form-check-input sizeCheck" type="checkbox" value="" id="TallCheck" checked />
+                      <label class="form-check-label" for="TallCheck">
                       Tall
                     </label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                    <label class="form-check-label" for="flexCheckDefault">
+                    <input class="form-check-input sizeCheck" type="checkbox" value="" id="AverageCheck" checked />
+                    <label class="form-check-label" for="AverageCheck">
                       Average
                     </label>
                   </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
+                      <input class="form-check-input sizeCheck" type="checkbox" value="" id="ShortCheck" checked />
+                      <label class="form-check-label" for="ShortCheck">
                         Short
                       </label>
                     </div>
@@ -370,7 +391,7 @@ function filterResults() {
         <!-- content -->
         <div class="col-lg-9">
           <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
-            <strong class="d-block py-2">32 Items found </strong>
+            <strong class="d-block py-2">{{ itemsFound }} Items Found </strong>
             <div class="ms-auto">
               <select class="form-select d-inline-block w-auto border pt-1">
                 <option value="0">Best match</option>
@@ -411,28 +432,24 @@ function filterResults() {
                       <h5 class="mb-1 me-1"><router-link
                           :to="{ name: 'Product', params: { id: item.id, currencyRate: currencyRate, currencyType: currencyType } }">{{
                             item.Title }}</router-link></h5>
-                      <h6 class="mb-1 me-1">{{ ((item.Price * currencyRate) - (item.Price * currencyRate *
-                        discount)).toLocaleString(
-                          undefined, { style: "currency", currency: currencyType }) }}</h6>
-                      <span class="text-danger"><s>{{ (item.Price * currencyRate).toLocaleString(
+                      <br>
+                      <h6>{{ (item.Price * currencyRate).toLocaleString(
                         undefined, { style: "currency", currency: currencyType })
-                      }}</s></span>
+                      }}</h6>
                     </div>
                     <p class="card-text">{{ item.Description }}</p>
                     <p class="card-text">{{ item.Dimensions }}</p>
                     <p hidden>{{ item.Tags }}</p>
-                    <!-- 
-
-                                          Add quantity selector
-                                          Add stock count
-                                          if stock count is below limit (10):
-                                            email admin with stock alert
-                                            add styling to stock count
-
-                                         -->
                     <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-                      <a href="#!" class="btn btn-primary shadow-0 me-1">Add to Cart</a>
-                      <a href="#!" class="btn btn-primary shadow-0 me-1">Add to Wishlist</a>
+                      <a href="#!" class="btn btn-success shadow-0 me-1">Buy Now</a>
+                      <a href="#!" class="btn btn-primary shadow-0 me-1">Add to Basket</a>
+                      <!-- 
+                        Call addToBasket()
+                        Call buyNow()
+                        Try to add these functions into a js file, 
+                          because they are needed by multiple pages
+                        See Fedaas getGeneIdInfo() in AWebD Project
+                       -->
                     </div>
                   </div>
                 </div>

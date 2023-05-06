@@ -2,8 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import { Form, Field, ErrorMessage } from 'vee-validate'
-import { validateEmail } from '../assets/utils.js'
+import { validateEmail, checkPasswordLength } from '../assets/utils.js'
 
 import {
   firebaseAuthentication,
@@ -13,9 +12,25 @@ import {
 
 defineEmits(['register-clicked'])
 
-const registerResponse = ref('')
+const registerMessage = ref('')
 
 const router = useRouter()
+
+function passwordToggle() {
+  var password = document.getElementById("registerPassword");
+  if (password.type === "password") {
+    password.type = "text";
+  } else {
+    password.type = "password";
+  }
+
+  var confirm = document.getElementById("registerPassCon");
+  if (confirm.type === "password") {
+    confirm.type = "text";
+  } else {
+    confirm.type = "password";
+  }
+}
 
 function getAge(dateString) {
   var today = new Date();
@@ -28,67 +43,33 @@ function getAge(dateString) {
   return age;
 }
 
-
-function register(values) {
-  if (getAge(values.DOB) > 18) {
-    createUserWithEmailAndPassword(firebaseAuthentication, values.email, values.password)
+function register() {
+  if (getAge(document.getElementById('registerDOB').value) > 18) {
+    createUserWithEmailAndPassword(firebaseAuthentication,
+      document.getElementById('registerEmail').value, document.getElementById('registerPassword').value)
       .then((userCredentials) => {
-        userCredentials.firstName = values.firstName
-        userCredentials.surname = values.surname
-        userCredentials.DOB = values.DOB
+        userCredentials.firstName = document.getElementById('registerFirstnames').value
+        userCredentials.surname = document.getElementById('registerSurnames').value
+        userCredentials.DOB = document.getElementById('registerDOB').value
       })
       .then(() =>
         updateProfile(firebaseAuthentication.currentUser, {
-          DOB: values.DOB,
-          firstName: values.firstName,
-          surname: values.surname
+          firstName: document.getElementById('registerFirstnames').value,
+          surname: document.getElementById('registerSurnames').value,
+          DOB: document.getElementById('registerDOB').value
         }).then(() => {
-          router.push({
-            name: 'Home',
-            params: { message: 'Successfully registered and automatically logged in. Redirecting to home page.' }
-          })
-          setTimeout(home, 1500)
+          router.push('/login')
         })
       )
       .catch((error) => {
-        registerResponse.value = error.message.substring(10)
+        console.log(error.message)
+        registerMessage.value = error.message.substring(error.message.indexOf("/") + 1, error.message.length - 2)
       })
   }
   else {
-    registerResponse.value = "You must be at least 18 to create an account"
+    registerMessage.value = "Age must be 18"
   }
 }
-
-// function register(values) {
-//   if (getAge(values.DOB) > 18) {
-//     createUserWithEmailAndPassword(firebaseAuthentication, values.email, values.password)
-//       .then((userCredentials) => {
-//         userCredentials.firstName = values.firstName
-//         userCredentials.surname = values.surname
-//         userCredentials.DOB = values.DOB
-//       })
-//       .then(() =>
-//         updateProfile(firebaseAuthentication.currentUser, {
-//           firstName: values.firstName,
-//           surname: values.surname,
-//           DOB: values.DOB
-//         }).then(() => {
-//           router.push({
-//             name: '/',
-//             params: { message: 'Successfully registered and automatically logged in. Redirecting to home page.' }
-//           })
-//           setTimeout(home, 1500)
-//         })
-//       )
-//       .catch((error) => {
-//         openModal("Error During Registration", error)
-//       })
-//   }
-//   else {
-//     openModal("Age Warning", "You must be over 18 to create an account")
-//     // registerResponse.value = "You must be over 18 to create an account"
-//   }
-// }
 
 function home() {
   router.push('/')
@@ -96,64 +77,51 @@ function home() {
 </script>
 
 <template>
+  <div class="onPage" id="registerPage">
+    <h2 style="text-align: center">Register</h2>
 
-  <Form label-width="50px" class="form-signin" @submit="register">
-    <h2 class="h3 mb-3 fw-normal">Register</h2>
+    <label>Firstnames</label>
+    <input class="form-control" required id="registerFirstnames" type="text" placeholder="Your firstnames" />
 
-    <div class="form-floating">
-      <Field class="form-control" placeholder="First Name" autocomplete="off" name="firstName" rules="required" />
-      <ErrorMessage name="firstName" />
-      <label for="floatingInput">First Name</label>
-    </div>
-    <div class="form-floating">
-      <Field class="form-control" placeholder="Surname" autocomplete="off" name="surname" rules="required" />
-      <ErrorMessage name="surname" />
-      <label for="floatingInput">Surname</label>
-    </div>
+    <label>Surnames</label>
+    <input class="form-control" required id="registerSurnames" type="text" placeholder="Your surnames" />
 
-    <div class="form-floating">
-      <Field class="form-control" placeholder="eg. 06/11/2000" autocomplete="off" name="DOB" rules="required" />
-      <ErrorMessage name="DOB" />
-      <label for="floatingInput">Date of Birth</label>
-    </div>
+    <label>Date of Birth</label>
+    <input class="form-control" required id="registerDOB" type="date" />
 
-    <div class="form-floating">
-      <Field class="form-control" placeholder="Email" autocomplete="on" :rules="validateEmail" name="email" />
-      <ErrorMessage name="email" />
-      <label for="floatingInput">Email</label>
-    </div>
+    <label>Email</label>
+    <input class="form-control" required id="registerEmail" type="email" placeholder="eg. some.fancy@email.com"
+      :rules="validateEmail" />
 
-    <div class="form-floating">
-      <Field class="form-control" type="password" placeholder="password" autocomplete="off" show-password name="password"
-        rules="required" />
-      <ErrorMessage name="password" />
-      <label for="floatingInput">Password</label>
-    </div>
+    <label>Password</label>
+    <input class="form-control" required id="registerPassword" type="password" placeholder="Password"
+      :rules="checkPasswordLength" />
 
-    <div class="form-floating">
-      <Field class="form-control" type="password" placeholder="password" autocomplete="off" show-password
-        name="confirmation" rules="required|confirmed:password" />
-      <ErrorMessage name="confirmation" />
-      <label for="floatingInput">Confirm Password</label>
+    <label>Confirm Password</label>
+    <input class="form-control" required id="registerPassCon" type="password" placeholder="Password" rules="required|confirmed:password"
+      :rules="checkPasswordLength" />
+
+    <div class="input-group" style="margin-top: 3px; margin-left: 25%;">
+      <div class="input-group-text">
+        <input type="checkbox" @click="passwordToggle()">
+      </div>
+      <div class="input-group-append">
+        <span class="input-group-text">Show Passwords</span>
+      </div>
     </div>
 
-    <div v-if="registerResponse">
-      <p>{{ registerResponse }}</p>
-    </div>
+    <div v-if="registerMessage" style="text-align: center">{{ registerMessage }}</div>
 
-    <button class="w-100 btn btn-lg btn-primary" style="margin: auto">Register</button>
-  </Form>
+    <button class="w-100 btn btn-lg btn-primary" style="margin-top: 5px" @click="register()">Register</button>
+    <router-link to="/login" style="margin: 0px 0px 0px 27%;">Already have an account?</router-link>
+
+  </div>
 </template>
 
 <style>
-.form-signin {
-  width: 100%;
-  max-width: 300px;
-  padding-top: 70px;
+#registerPage {
   margin: auto;
-}
-
-label {
-  color: #477979;
+  width: 30%;
+  display: block;
 }
 </style>
