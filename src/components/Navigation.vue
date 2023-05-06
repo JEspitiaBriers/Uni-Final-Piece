@@ -17,45 +17,6 @@ function changeRoute(e) {
 	e.target.value.includes('Hello') ? router.push(currentPage) : router.push("/" + e.target.value)
 }
 
-let myHeaders = new Headers();
-myHeaders.append("apikey", "wFtoAuudktssS0qgvj1oSNZ2Uy0qsUMI"); //encrypt the key
-
-let requestOptions = {
-	method: 'GET',
-	redirect: 'follow',
-	headers: myHeaders
-};
-
-let currencyRate = ref(1)
-
-async function getCurrentRate(currencyType) {
-	if (currencyType != 'GBP'&& typeof currencyType !== 'undefined') {
-		let currencyData;
-		console.log("Called and is " + currencyType)
-
-		document.getElementById("loadingCurrency").style.display = "block";
-		document.getElementById("fade").style.opacity = "25%";
-
-		const currencyResponse = await fetch("https://api.apilayer.com/exchangerates_data/convert?to=" + currencyType + "&from=GBP&amount=1", requestOptions)
-		/*
-			while there is no reponse, show popup window that says loading
-		*/
-		currencyData = await currencyResponse.json()
-
-		document.getElementById("loadingCurrency").style.display = "none";
-		document.getElementById("fade").style.opacity = "100%";
-
-		console.log("plain" + currencyData)
-		console.log(".value " + currencyData.value)
-		console.log(".result " + currencyData.result)
-
-		currencyRate.value = currencyData.result
-	}
-	else {
-		console.log("Called but is GBP")
-		return "1"
-	}
-}
 </script>
 
 <template>
@@ -71,7 +32,7 @@ async function getCurrentRate(currencyType) {
 				<div class="d-flex float-end">
 					<a>
 						<select class="form-select d-inline-block w-auto border pt-1 me-1" 
-							@change="$emit('changeCurrency', $event.target.value), getCurrentRate($event.target.value)">
+							@change="$emit('changeCurrency', $event.target.value)">
 							<option value="GBP">GBP</option>
 							<option value="EUR">EUR</option>
 							<option value="USD">USD</option>

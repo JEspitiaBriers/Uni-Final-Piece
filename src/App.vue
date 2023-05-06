@@ -88,15 +88,53 @@ onMounted(async () => {
   saleItems.value = SaleItems
 })
 
+let myHeaders = new Headers();
+myHeaders.append("apikey", "wFtoAuudktssS0qgvj1oSNZ2Uy0qsUMI"); //encrypt the key
+
+let requestOptions = {
+  method: 'GET',
+  redirect: 'follow',
+  headers: myHeaders
+};
+
 let currencyType = ref("GBP")
-function changeCurrency(selectedCurrency) {
+let currencyRate = ref(1)
+
+async function changeCurrency(selectedCurrency) {
   currencyType.value = selectedCurrency
+
+  if (currencyType != 'GBP' && typeof currencyType !== 'undefined') {
+    let currencyData;
+    console.log("Called and is " + currencyType)
+
+    document.getElementById("loadingCurrency").style.display = "block";
+    document.getElementById("fade").style.opacity = "25%";
+
+    const currencyResponse = await fetch("https://api.apilayer.com/exchangerates_data/convert?to=" + currencyType.value + "&from=GBP&amount=1", requestOptions)
+    /*
+      while there is no reponse, show popup window that says loading
+    */
+    currencyData = await currencyResponse.json()
+
+    document.getElementById("loadingCurrency").style.display = "none";
+    document.getElementById("fade").style.opacity = "100%";
+
+    console.log("plain" + currencyData)
+    console.log(".value " + currencyData.value)
+    console.log(".result " + currencyData.result)
+
+    currencyRate.value = currencyData.result
+  }
+  else {
+    console.log("Called but is GBP")
+    return "1"
+  }
 }
 </script>
 
 <template>
   <Navigation :userItems="userItems" @change-currency="changeCurrency" @logout="logout" /> 
-  <RouterView :userItems="userItems" :saleItems="saleItems" :currencyType="currencyType" :key="reloadKey"/>
+  <RouterView :userItems="userItems" :saleItems="saleItems" :currencyType="currencyType" :currencyRate="currencyRate" :key="reloadKey"/>
 </template>
 
 <style>
