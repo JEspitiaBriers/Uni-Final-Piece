@@ -28,7 +28,7 @@ function login() {
     },
     (error) => {
       if (error.message.substring(error.message.indexOf("/") + 1, error.message.length - 2) == "internal-error") {
-        loginMessage = "missing-field"
+        loginMessage.value = "missing-field"
       }
       else {
         loginMessage.value = error.message.substring(error.message.indexOf("/") + 1, error.message.length - 2)

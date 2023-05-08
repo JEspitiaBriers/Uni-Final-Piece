@@ -1,11 +1,4 @@
 <script setup>
-/*
-
-find language translator api and possibly implement website translation
-
-
-
-*/
 import { ref } from 'vue'
 import { useRouter } from 'vue-router';
 import Search from '../components/Search.vue'
@@ -26,94 +19,134 @@ let variables = defineProps({
     type: String
   }
 })
+const itemsDisplay = ref(variables.saleItems)
+const itemsFound = ref(variables.saleItems.length)
 
 //Search variables/functions
-let searchTerm = ref("")
+const searchTerm = ref("")
 
 function changeSearch(searchTermInput) {
   searchTerm.value = searchTermInput
-  filterResults()
+  applyAllFilters()
 }
 
 //Category filter variables/functions
-let categoriesSelected = ref([])
+const categoriesSelected = ref([])
 
 function filterCategories() {
+  categoriesSelected.value = []
   let categoryArray = document.getElementsByClassName('categoryCheck')
-  for (let i = 0; i < categoryArray.length; i++){
+  for (let i = 0; i < categoryArray.length; i++) {
     if (categoryArray[i].checked) {
       let category = (categoryArray[i].id).replace(/([A-Z])/g, ' $1').trim()
-      console.log(category)
       category = category.substring(0, category.length - 6)
       categoriesSelected.value.push(category)
-      console.log(categoryArray[i].id + " checked")
-    }
-    else {
-      console.log(categoryArray[i].id + " unchecked")
     }
   }
-  console.log(categoriesSelected.value)
-  filterResults()
 }
 
 //Size filter variables/functions
-let sizesSelected = ref([])
+const areaSelected = ref([])
+const heightSelected = ref([])
 
 function filterSizes(e) {
-  let sizeArray = document.getElementsByClassName('sizeCheck')
-  for (let i = 0; i < sizeArray.length; i++) {
-    if (sizeArray[i].checked) {
-      let size = (sizeArray[i].id).replace(/([A-Z])/g, ' $1').trim()
-      console.log(size)
+  areaSelected.value = []
+  let areaArray = document.getElementsByClassName('areaCheck')
+  for (let i = 0; i < areaArray.length; i++) {
+    if (areaArray[i].checked) {
+      let size = (areaArray[i].id).replace(/([A-Z])/g, ' $1').trim()
       size = size.substring(0, size.length - 6)
-      sizesSelected.value.push(size)
-      console.log(sizeArray[i].id + " checked")
-    }
-    else {
-      console.log(sizeArray[i].id + " unchecked")
+      areaSelected.value.push(size)
     }
   }
-  console.log(sizesSelected.value)
-  filterResults()
+
+  heightSelected.value = []
+  let heightArray = document.getElementsByClassName('heightCheck')
+  for (let i = 0; i < heightArray.length; i++) {
+    if (heightArray[i].checked) {
+      let size = (heightArray[i].id).replace(/([A-Z])/g, ' $1').trim()
+      size = size.substring(0, size.length - 6)
+      heightSelected.value.push(size)
+    }
+  }
 }
 
 //Price filter variables/functions
-let minPriceValue = ref("1")
-let maxPriceValue = ref("1000")
-let priceInputErrorMessage = ref("")
+const minPriceValue = ref(1)
+const maxPriceValue = ref(1000)
+const priceInputErrorMessage = ref("")
 
 function checkPriceInputs() {
-  console.log("called")
-  if (isNaN(minPriceValue.value) || isNaN(maxPriceValue.value)) {
+  if (isNaN(minPriceValue.value) || isNaN(maxPriceValue.value) || minPriceValue.value <= 0 || maxPriceValue.value <= 0) {
     priceInputErrorMessage.value = "Inputs must be valid numbers\n(greater than 0)"
     minPriceValue.value = "1"
     maxPriceValue.value = "1000"
-    console.log(priceInputErrorMessage)
   }
   else if (minPriceValue.value >= maxPriceValue.value) {
     priceInputErrorMessage.value = "Minimum value cannot be larger than \nor equal to Maximum value"
-    minPriceValue.value = "0"
+    minPriceValue.value = "1"
     maxPriceValue.value = "1000"
-    console.log(priceInputErrorMessage)
   }
   else {
     priceInputErrorMessage.value = ""
-    filterResults()
   }
 }
 
 function applyAllFilters() {
-  filterCategories()
-  filterSizes()
   checkPriceInputs()
-  filterResults()
+  if (priceInputErrorMessage.value == "") {
+    filterCategories()
+    filterSizes()
+    filterResults()
+  }
 }
 
 function filterResults() {
-  console.log("This is the filter function, it doesnt do anything yet")
-  console.log("Search: " + searchTerm.value + "\nMin: " + minPriceValue.value +
-    "\nMax " + maxPriceValue.value + "\nCategories: " + categoriesSelected.value + "\nSizes: " + sizesSelected.value)
-  itemsFound = 0
+  let newResults = []
+  let newFilteredResults = []
+  if (searchTerm.value != "") {
+    for (let i = 0; i < variables.saleItems.length; i++) {
+      let current = variables.saleItems[i]
+      let searchUpper = Object.keys(current).reduce((accu, curr) => ({ ...accu, [curr]: (typeof current[curr] === "string") ? current[curr].toUpperCase() : current[curr] }), {})
+
+      if (Object.values(searchUpper).some(check =>
+        typeof check === "string" && check.includes(searchTerm.value.toUpperCase()))) {
+        newResults.push(variables.saleItems[i])
+      }
+    }
+  }
+  else {
+    newResults = variables.saleItems
+  }
+
+  newResults = newResults.filter(item => Number(item.Price) > minPriceValue.value)
+  newResults = newResults.filter(item => Number(item.Price) < maxPriceValue.value)
+  newResults = newResults.filter(item => categoriesSelected.value.includes(item.Categories))
+
+  //below works for enclosures, other categories have other size measure eg. bedding and substrate is liters
+  for (const item of newResults) {
+    if (areaSelected.value.some(size => item.Tags.includes(size)) && heightSelected.value.some(size => item.Tags.includes(size))) {
+      newFilteredResults.push(item)
+    }
+  }
+  itemsDisplay.value = newFilteredResults
+  itemsFound.value = newFilteredResults.length
+}
+
+function clearAllFilters() {
+  searchTerm.value = ""
+  let categoryArray = document.getElementsByClassName('categoryCheck')
+  for (let i = 0; i < categoryArray.length; i++) {
+    categoryArray[i].checked = true
+  }
+  let sizeArray = document.getElementsByClassName('sizeCheck')
+  for (let i = 0; i < sizeArray.length; i++) {
+    sizeArray[i].checked = true
+  }
+  minPriceValue.value = 1
+  maxPriceValue.value = 1000
+  itemsDisplay.value = variables.saleItems
+  itemsFound.value = variables.saleItems.length
 }
 </script>
 
@@ -144,43 +177,50 @@ function filterResults() {
           <!-- Collapsible wrapper -->
           <div class="collapse card d-lg-block mb-5" id="saleFilters">
             <div class="accordion" id="saleFiltersSide">
-              <button type="button" class="btn btn-white w-100 border border-secondary"
-                @click="applyAllFilters()">Apply All Filters</button>
+              <button type="button" class="btn btn-white w-100 border border-secondary" @click="applyAllFilters()">Apply
+                All Filters</button>
+              <button type="button" class="btn btn-white w-100 border border-secondary" @click="clearAllFilters()">Clear
+                All Filters</button>
               <div class="accordion-item">
                 <h2 class="accordion-header" id="categoriesButton">
                   <button class="accordion-button text-dark bg-light" type="button" data-bs-toggle="collapse"
                     data-bs-target="#categoriesCollapse" aria-expanded="true" aria-controls="categoriesCollapse">
-                    {{ searchTerm }} Categories
+                    Categories
                   </button>
                 </h2>
                 <div id="categoriesCollapse" class="accordion-collapse collapse show" aria-labelledby="categoriesButton">
                   <div class="accordion-body">
                     <div class="form-check">
-                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="AccessoriesCheck" checked />
+                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="AccessoriesCheck"
+                        checked />
                       <label class="form-check-label" for="AccessoriesCheck">
                         Accessories
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="BaskingAndHydrationCheck" checked />
+                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="BaskingAndHydrationCheck"
+                        checked />
                       <label class="form-check-label" for="BaskingAndHydrationCheck">
                         Basking and Hydrating
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="BeddingAndSubstrateCheck" checked />
+                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="BeddingAndSubstrateCheck"
+                        checked />
                       <label class="form-check-label" for="BeddingAndSubstrateCheck">
                         Bedding and Substrate
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="EnclosureCheck" checked />
-                      <label class="form-check-label" for="EnclosureCheck">
+                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="EnclosuresCheck"
+                        checked />
+                      <label class="form-check-label" for="EnclosuresCheck">
                         Enclosures
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="HeatAndLightCheck" checked />
+                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="HeatAndLightCheck"
+                        checked />
                       <label class="form-check-label" for="HeatAndLightCheck">
                         Heat and Light
                       </label>
@@ -192,9 +232,6 @@ function filterResults() {
                       </label>
                     </div>
                   </div>
-                  <!-- add all checkboxes to form so they can be submitted -->
-                  <button type="button" class="btn btn-white w-100 border border-secondary"
-                    @click="filterCategories()">Apply</button>
                 </div>
               </div>
               <div class="accordion-item">
@@ -210,45 +247,42 @@ function filterResults() {
                   <div class="accordion-body">
                     Area
                     <div class="form-check">
-                      <input class="form-check-input sizeCheck" type="checkbox" value="" id="LargeChack" checked />
-                      <label class="form-check-label" for="LargeChack">
+                      <input class="form-check-input areaCheck" type="checkbox" value="" id="LargeCheck" checked />
+                      <label class="form-check-label" for="LargeCheck">
                         Large
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input sizeCheck" type="checkbox" value="" id="MediumCheck" checked />
+                      <input class="form-check-input areaCheck" type="checkbox" value="" id="MediumCheck" checked />
                       <label class="form-check-label" for="MediumCheck">
                         Medium
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input sizeCheck" type="checkbox" value="" id="SmallCheck" checked />
+                      <input class="form-check-input areaCheck" type="checkbox" value="" id="SmallCheck" checked />
                       <label class="form-check-label" for="SmallCheck">
                         Small
                       </label>
                     </div>
                     Height
                     <div class="form-check">
-                      <input class="form-check-input sizeCheck" type="checkbox" value="" id="TallCheck" checked />
+                      <input class="form-check-input heightCheck" type="checkbox" value="" id="TallCheck" checked />
                       <label class="form-check-label" for="TallCheck">
-                      Tall
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input sizeCheck" type="checkbox" value="" id="AverageCheck" checked />
-                    <label class="form-check-label" for="AverageCheck">
-                      Average
-                    </label>
-                  </div>
+                        Tall
+                      </label>
+                    </div>
                     <div class="form-check">
-                      <input class="form-check-input sizeCheck" type="checkbox" value="" id="ShortCheck" checked />
+                      <input class="form-check-input heightCheck" type="checkbox" value="" id="AverageCheck" checked />
+                      <label class="form-check-label" for="AverageCheck">
+                        Average
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input heightCheck" type="checkbox" value="" id="ShortCheck" checked />
                       <label class="form-check-label" for="ShortCheck">
                         Short
                       </label>
                     </div>
-                    <!-- add all checkboxes to form so they can be submitted -->
-                    <button type="button" class="btn btn-white w-100 border border-secondary"
-                      @click="filterSizes()">Apply</button>
                   </div>
                 </div>
               </div>
@@ -261,15 +295,15 @@ function filterResults() {
                 </h2>
                 <div id="priceCollapse" class="accordion-collapse collapse show" aria-labelledby="priceButton">
                   <div class="accordion-body">
-                  <div class="row mb-3">
-                    <div class="col-6">
-                      <p class="mb-0">
-                        Min
-                      </p>
-                      <div class="form-outline">
-                        <input type="number" id="minPrice" v-model="minPriceValue" class="form-control" />
-                        <label class="form-label" for="typeNumber">{{ (1).toLocaleString(
-                          undefined, { style: "currency", currency: currencyType }) }}</label>
+                    <div class="row mb-3">
+                      <div class="col-6">
+                        <p class="mb-0">
+                          Min
+                        </p>
+                        <div class="form-outline">
+                          <input type="number" id="minPrice" v-model="minPriceValue" class="form-control" />
+                          <label class="form-label" for="typeNumber">{{ (1).toLocaleString(
+                            undefined, { style: "currency", currency: currencyType }) }}</label>
                         </div>
                       </div>
                       <div class="col-6">
@@ -284,8 +318,6 @@ function filterResults() {
                       </div>
                     </div>
                     <p>{{ priceInputErrorMessage }}</p>
-                    <button type="button" class="btn btn-white w-100 border border-secondary"
-                      @click="checkPriceInputs()">Apply</button>
                   </div>
                 </div>
               </div>
@@ -337,8 +369,7 @@ function filterResults() {
                       </label>
                     </div>
                     <!-- add all checkboxes to form so they can be submitted -->
-                    <button type="button" class="btn btn-white w-100 border border-secondary"
-                      @click="filterResults()">Apply</button>
+                    <button type="button" class="btn btn-white w-100 border border-secondary" @click="">Apply</button>
                   </div>
                 </div>
               </div>
@@ -369,46 +400,32 @@ function filterResults() {
           </header>
 
           <div class="row">
-            <div v-for="item in saleItems" :key="item.id">
-              <!--
-                  <div v-if="item.sale">
-                    //add banner to card
-                  <div>
-                  <div v-else>
-                    //dont add banner to card
+            <div v-for="item in itemsDisplay" :key="item.id" class="col-lg-4 col-md-6 col-sm-6 d-flex">
+              <div class="card w-100 my-2 shadow-2-strong">
+                <img :src="item.ImageMain" :alt="item.Alt" class="card-img-top" />
+                <div class="card-body d-flex flex-column">
+                  <div class="d-flex flex-row">
+                    <h5 class="mb-1 me-1"><router-link
+                        :to="{ name: 'Product', params: { id: item.id, currencyRate: currencyRate, currencyType: currencyType } }">{{
+                          item.Title }}</router-link></h5>
+                    <br>
+                    <h6>{{ (item.Price * currencyRate).toLocaleString(
+                      undefined, { style: "currency", currency: currencyType })
+                    }}</h6>
                   </div>
-                  v-if card is on sale, add banner (see Scan.co.uk today only offer)
-
-                -->
-
-
-              <div class="col-lg-4 col-md-6 col-sm-6 d-flex">
-                <div class="card w-100 my-2 shadow-2-strong">
-                  <img :src="item.ImageMain" :alt="item.Alt" class="card-img-top" />
-                  <div class="card-body d-flex flex-column">
-                    <div class="d-flex flex-row">
-                      <h5 class="mb-1 me-1"><router-link
-                          :to="{ name: 'Product', params: { id: item.id, currencyRate: currencyRate, currencyType: currencyType } }">{{
-                            item.Title }}</router-link></h5>
-                      <br>
-                      <h6>{{ (item.Price * currencyRate).toLocaleString(
-                        undefined, { style: "currency", currency: currencyType })
-                      }}</h6>
-                    </div>
-                    <p class="card-text">{{ item.Description }}</p>
-                    <p class="card-text">{{ item.Dimensions }}</p>
-                    <p hidden>{{ item.Tags }}</p>
-                    <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-                      <a href="#!" class="btn btn-success shadow-0 me-1">Buy Now</a>
-                      <a href="#!" class="btn btn-primary shadow-0 me-1">Add to Basket</a>
-                      <!-- 
+                  <p class="card-text">{{ item.Description }}</p>
+                  <p class="card-text">{{ item.Dimensions }}</p>
+                  <p hidden>{{ item.Tags }}</p>
+                  <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
+                    <a href="#!" class="btn btn-success shadow-0 me-1">Buy Now</a>
+                    <a href="#!" class="btn btn-primary shadow-0 me-1">Add to Basket</a>
+                    <!-- 
                         Call addToBasket()
                         Call buyNow()
                         Try to add these functions into a js file, 
                           because they are needed by multiple pages
                         See Fedaas getGeneIdInfo() in AWebD Project
                        -->
-                    </div>
                   </div>
                 </div>
               </div>
@@ -557,5 +574,4 @@ function filterResults() {
   margin-top: 10%;
   position: fixed;
   z-index: 99;
-}
-</style>
+}</style>

@@ -1,10 +1,12 @@
 <script setup>
-import { ref, reactive, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import { firebaseFireStore, firebaseAuthentication, onAuthStateChanged, signOut } from '@/firebase/database'
 import { collection, getDocs } from 'firebase/firestore';
 
 import { useRouter } from 'vue-router'
 import Navigation from '@/components/Navigation.vue'
+
+let loaded = false
 
 const router = useRouter()
 
@@ -12,7 +14,6 @@ const user = ref(null)
 const errorLogout = ref(null)
 
 let previousPage = router.options.history.state.back
-let currentPage = ref(router.currentRoute.value.name)
 
 window.addEventListener("offline", (e) => {
   router.push("/offline")
@@ -25,6 +26,45 @@ window.addEventListener("online", (e) => {
   else {
     router.back()
   }
+})
+
+const saleItems = ref([])
+onMounted(async () => {
+  const querySnapshot = await getDocs(collection(firebaseFireStore, "SaleItems"))
+  let SaleItems = [];
+  querySnapshot.forEach((doc) => {
+    const saleItem = {
+      id: doc.id,
+      Title: doc.data().Title,
+      Description: doc.data().Description,
+      Tags: doc.data().Tags,
+      Price: doc.data().Price,
+      Dimensions: doc.data().Dimensions,
+      ImageMain: doc.data().ImageMain,
+      Images: doc.data().Images,
+      Categories: doc.data().Categories
+    }
+    SaleItems.push(saleItem)
+  })
+  saleItems.value = SaleItems
+  loaded = true
+})
+
+const userItems = ref([])
+onMounted(async () => {
+  const querySnapshot = await getDocs(collection(firebaseFireStore, "Users"))
+  let fbUsers = [];
+  querySnapshot.forEach((doc) => {
+    const user = {
+      id: doc.id,
+      Firstname: doc.data().Firstname,
+      Surname: doc.data().Surname,
+      Email: doc.data().Email,
+      DOB: doc.data().DOB
+    }
+    fbUsers.push(user)
+  })
+  userItems.value = fbUsers
 })
 
 onAuthStateChanged(firebaseAuthentication, (currentUser) => {
@@ -46,47 +86,6 @@ function logout() {
     }
   )
 }
-
-function home() {
-  router.push('/')
-}
-
-const userItems = ref([])
-onMounted(async () => {
-  const querySnapshot = await getDocs(collection(firebaseFireStore, "Users"))
-  let fbUsers = [];
-  querySnapshot.forEach((doc) => {
-    const user = {
-      id: doc.id,
-      Firstname: doc.data().Firstname,
-      Surname: doc.data().Surname,
-      Email: doc.data().Email,
-      DOB: doc.data().DOB
-    }
-    fbUsers.push(user)
-  })
-  userItems.value = fbUsers
-})
-
-const saleItems = ref([])
-onMounted(async () => {
-  const querySnapshot = await getDocs(collection(firebaseFireStore, "SaleItems"))
-  let SaleItems = [];
-  querySnapshot.forEach((doc) => {
-    const saleItem = {
-      id: doc.id,
-      Title: doc.data().Title,
-      Description: doc.data().Description,
-      Tags: doc.data().Tags,
-      Price: doc.data().Price,
-      Dimensions: doc.data().Dimensions,
-      ImageMain: doc.data().ImageMain,
-      Images: doc.data().Images,
-    }
-    SaleItems.push(saleItem)
-  })
-  saleItems.value = SaleItems
-})
 
 let myHeaders = new Headers();
 myHeaders.append("apikey", "wFtoAuudktssS0qgvj1oSNZ2Uy0qsUMI"); //encrypt the key
@@ -111,22 +110,15 @@ async function changeCurrency(selectedCurrency) {
     document.getElementById("fade").style.opacity = "25%";
 
     const currencyResponse = await fetch("https://api.apilayer.com/exchangerates_data/convert?to=" + currencyType.value + "&from=GBP&amount=1", requestOptions)
-    /*
-      while there is no reponse, show popup window that says loading
-    */
+
     currencyData = await currencyResponse.json()
 
     document.getElementById("loadingCurrency").style.display = "none";
     document.getElementById("fade").style.opacity = "100%";
 
-    console.log("plain" + currencyData)
-    console.log(".value " + currencyData.value)
-    console.log(".result " + currencyData.result)
-
     currencyRate.value = currencyData.result
   }
   else {
-    console.log("Called but is GBP")
     return "1"
   }
 }
@@ -134,7 +126,9 @@ async function changeCurrency(selectedCurrency) {
 
 <template>
   <Navigation :userItems="userItems" @change-currency="changeCurrency" @logout="logout" /> 
-  <RouterView :userItems="userItems" :saleItems="saleItems" :currencyType="currencyType" :currencyRate="currencyRate" :key="reloadKey"/>
+  <div v-if="loaded">
+    <RouterView :userItems="userItems" :saleItems="saleItems" :currencyType="currencyType" :currencyRate="currencyRate"/>
+  </div>
 </template>
 
 <style>
