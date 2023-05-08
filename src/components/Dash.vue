@@ -166,7 +166,7 @@ function showPerPage() {
   else {
     pageCount.value = Math.ceil(itemsFound.value.length / perPage.value)
     itemsDisplay.value = itemsFound.value.slice((currentPage.value - 1) * perPage.value,
-      ((currentPage.value - 1) * perPage.value) + perPage.value)
+      ((currentPage.value - 1) * perPage.value) + parseInt(perPage.value))
   }
 }
 
