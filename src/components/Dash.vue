@@ -321,58 +321,6 @@ function clearAllFilters() {
                   </div>
                 </div>
               </div>
-              <div class="accordion-item">
-                <h2 class="accordion-header" id="ratingButton">
-                  <button class="accordion-button text-dark bg-light" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false"
-                    aria-controls="panelsStayOpen-collapseFive">
-                    Ratings
-                  </button>
-                </h2>
-                <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse show"
-                  aria-labelledby="ratingButton">
-                  <div class="accordion-body">
-                    <!-- Default checkbox -->
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
-                        <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
-                          class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-warning"></i>
-                      </label>
-                    </div>
-                    <!-- Default checkbox -->
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
-                        <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
-                          class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
-                        <i class="fas fa-star text-secondary"></i>
-                      </label>
-                    </div>
-                    <!-- Default checkbox -->
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
-                        <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
-                          class="fas fa-star text-warning"></i><i class="fas fa-star text-secondary"></i>
-                        <i class="fas fa-star text-secondary"></i>
-                      </label>
-                    </div>
-                    <!-- Default checkbox -->
-                    <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                      <label class="form-check-label" for="flexCheckDefault">
-                        <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i
-                          class="fas fa-star text-secondary"></i><i class="fas fa-star text-secondary"></i>
-                        <i class="fas fa-star text-secondary"></i>
-                      </label>
-                    </div>
-                    <!-- add all checkboxes to form so they can be submitted -->
-                    <button type="button" class="btn btn-white w-100 border border-secondary" @click="">Apply</button>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
