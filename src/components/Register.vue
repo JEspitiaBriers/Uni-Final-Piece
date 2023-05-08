@@ -45,26 +45,31 @@ function getAge(dateString) {
 
 function register() {
   if (getAge(document.getElementById('registerDOB').value) > 18) {
-    createUserWithEmailAndPassword(firebaseAuthentication,
-      document.getElementById('registerEmail').value, document.getElementById('registerPassword').value)
-      .then((userCredentials) => {
-        userCredentials.firstName = document.getElementById('registerFirstnames').value
-        userCredentials.surname = document.getElementById('registerSurnames').value
-        userCredentials.DOB = document.getElementById('registerDOB').value
-      })
-      .then(() =>
-        updateProfile(firebaseAuthentication.currentUser, {
-          firstName: document.getElementById('registerFirstnames').value,
-          surname: document.getElementById('registerSurnames').value,
-          DOB: document.getElementById('registerDOB').value
-        }).then(() => {
-          router.push('/login')
+    if (document.getElementById("registerPassword").value == document.getElementById("registerPassCon").value) {
+      createUserWithEmailAndPassword(firebaseAuthentication,
+        document.getElementById('registerEmail').value, document.getElementById('registerPassword').value)
+        .then((userCredentials) => {
+          userCredentials.firstName = document.getElementById('registerFirstnames').value
+          userCredentials.surname = document.getElementById('registerSurnames').value
+          userCredentials.DOB = document.getElementById('registerDOB').value
         })
-      )
-      .catch((error) => {
-        console.log(error.message)
-        registerMessage.value = error.message.substring(error.message.indexOf("/") + 1, error.message.length - 2)
-      })
+        .then(() =>
+          updateProfile(firebaseAuthentication.currentUser, {
+            firstName: document.getElementById('registerFirstnames').value,
+            surname: document.getElementById('registerSurnames').value,
+            DOB: document.getElementById('registerDOB').value
+          }).then(() => {
+            router.push('/login')
+          })
+        )
+        .catch((error) => {
+          console.log(error.message)
+          registerMessage.value = error.message.substring(error.message.indexOf("/") + 1, error.message.length - 2)
+        })
+    }
+    else {
+      registerMessage.value = "Passwords do not match"
+    }
   }
   else {
     registerMessage.value = "Age must be 18"

@@ -11,9 +11,6 @@ let searchTerm = ref("")
       v-model="searchTerm"
       @change="$emit('changeSearch', $event.target.value)"
       class="search col-lg-9" placeholder='Search'/>
-    <button type="button" :value="searchTerm" id="searchButton" class="col-lg-3 search" @click.once="$emit('changeSearch', $event.target.value)">
-      Search
-    </button>
   </ul> 
 </template>
 

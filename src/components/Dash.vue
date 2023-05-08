@@ -21,9 +21,12 @@ let variables = defineProps({
     type: String
   }
 })
-const itemsDisplay = ref(variables.saleItems)
-const itemsFound = ref(variables.saleItems.length)
 
+const itemsDisplay = ref(variables.saleItems)
+const itemsFound = ref(variables.saleItems)
+const perPage = ref(itemsFound.value.length)
+const pageCount = ref(10) //Math.ceil(itemsFound.value.length / perPage.value)
+const currentPage = ref(1)
 //Search variables/functions
 const searchTerm = ref("")
 
@@ -34,11 +37,6 @@ function changeSearch(searchTermInput) {
 
 //Category filter variables/functions
 const categoriesSelected = ref([])
-
-// BeddingAndSubstrate
-// Bedding And Substrate
-// Bedding And Substrate
-
 function filterCategories() {
   categoriesSelected.value = []
   let categoryArray = document.getElementsByClassName('categoryCheck')
@@ -56,7 +54,6 @@ function filterCategories() {
 //Size filter variables/functions
 const areaSelected = ref([])
 const heightSelected = ref([])
-
 function filterSizes(e) {
   areaSelected.value = []
   let areaArray = document.getElementsByClassName('areaCheck')
@@ -83,7 +80,6 @@ function filterSizes(e) {
 const minPriceValue = ref(1)
 const maxPriceValue = ref(1000)
 const priceInputErrorMessage = ref("")
-
 function checkPriceInputs() {
   if (isNaN(minPriceValue.value) || isNaN(maxPriceValue.value) || minPriceValue.value <= 0 || maxPriceValue.value <= 0) {
     priceInputErrorMessage.value = "Inputs must be valid numbers\n(greater than 0)"
@@ -143,8 +139,8 @@ function filterResults() {
       newFilteredResults.push(item)
     }
   }
-  itemsDisplay.value = newFilteredResults
-  itemsFound.value = newFilteredResults.length
+  itemsFound.value = newFilteredResults
+  showPerPage()
 }
 
 function clearAllFilters() {
@@ -159,8 +155,19 @@ function clearAllFilters() {
   }
   minPriceValue.value = 1
   maxPriceValue.value = 1000
-  itemsDisplay.value = variables.saleItems
-  itemsFound.value = variables.saleItems.length
+  itemsFound.value = variables.saleItems
+  showPerPage()
+}
+
+function showPerPage() {
+  if (perPage == itemsFound.value.length) {
+    itemsDisplay.value = itemsFound.value
+  }
+  else {
+    pageCount.value = Math.ceil(itemsFound.value.length / perPage.value)
+    itemsDisplay.value = itemsFound.value.slice((currentPage.value - 1) * perPage.value,
+      ((currentPage.value - 1) * perPage.value) + perPage.value)
+  }
 }
 
 function buyNow(id) {
@@ -201,7 +208,7 @@ function addToBasket(item) {
           <div class="collapse card d-lg-block mb-5" id="saleFilters">
             <div class="accordion" id="saleFiltersSide">
               <button type="button" class="btn btn-white w-100 border border-secondary" @click="applyAllFilters()">Apply
-                All Filters</button>
+                and Search</button>
               <button type="button" class="btn btn-white w-100 border border-secondary" @click="clearAllFilters()">Clear
                 All Filters</button>
               <div class="accordion-item">
@@ -351,8 +358,16 @@ function addToBasket(item) {
         <!-- content -->
         <div class="col-lg-9">
           <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
-            <strong class="d-block py-2">{{ itemsFound }} Items Found </strong>
+            <strong class="d-block py-2">{{ itemsFound.length }} Items Found </strong>
             <div class="ms-auto">
+              <label style="margin-right: 5px">Per Page:</label>
+              <select id="perPage" class="form-select d-inline-block w-auto border pt-1"
+                style="width: 80px; margin-right: 5px;" v-model="perPage" @change="(currentPage = 1), $refs.btnradio1.checked = true, showPerPage()">
+                <option value="1">9</option>
+                <option value="2">18</option>
+                <option value="3">27</option>
+                <option :value="itemsFound.length">All</option>
+              </select>
               <select class="form-select d-inline-block w-auto border pt-1">
                 <option value="0">Best match</option>
                 <option value="1">Recommended</option>
@@ -386,12 +401,9 @@ function addToBasket(item) {
                   </div>
                   <p class="card-text">{{ item.Description }}</p>
                   <p class="card-text">{{ item.Dimensions }}</p>
-                    <p class="card-text">{{ item.id}}</p>
-                  <p hidden>{{ item.Tags }}</p>
                   <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
                     <button class="btn btn-success">
-                      <router-link
-                        style="text-decoration: none; color: white;"
+                      <router-link style="text-decoration: none; color: white;"
                         :to="{ name: 'Payment', params: { id: item.id, currencyRate: currencyRate, currencyType: currencyType } }">
                         Buy Now
                       </router-link>
@@ -413,23 +425,14 @@ function addToBasket(item) {
 
           <!-- Pagination -->
           <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
-            <ul class="pagination">
-              <li class="page-item disabled">
-                <a class="page-link" href="#" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </a>
-              </li>
-              <li class="page-item active"><a class="page-link" href="#">1</a></li>
-              <li class="page-item"><a class="page-link" href="#">2</a></li>
-              <li class="page-item"><a class="page-link" href="#">3</a></li>
-              <li class="page-item"><a class="page-link" href="#">4</a></li>
-              <li class="page-item"><a class="page-link" href="#">5</a></li>
-              <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </a>
-              </li>
-            </ul>
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+              <input class="btn-check" type="radio" name="btnradio" id="btnradio1" ref="btnradio1" @click="(currentPage = 1), showPerPage()">
+              <label class="btn btn-outline-success" for="btnradio1">1</label>
+              <template v-for="index in pageCount - 1">
+                <input class="btn-check" type="radio" name="btnradio" :id="'btnradio' + (index + 1)" @click="(currentPage = index + 1), showPerPage()">
+                <label class="btn btn-outline-success" :for="'btnradio' + (index + 1)">{{ index + 1 }}</label>
+              </template>
+            </div>
           </nav>
           <!-- Pagination -->
         </div>
@@ -557,6 +560,7 @@ function addToBasket(item) {
 footer {
   background-color: #157347;
 }
+
 a {
   color: #157347;
   text-decoration: none;

@@ -22,7 +22,7 @@ function passwordToggle() {
 }
 
 function login() {
-  signInWithEmailAndPassword(firebaseAuthentication, document.getElementById('loginEmail').value, document.getElementById('loginEmail').value).then(
+  signInWithEmailAndPassword(firebaseAuthentication, document.getElementById('loginEmail').value, document.getElementById('loginPassword').value).then(
     (userCredential) => {
       router.push("/")
     },
