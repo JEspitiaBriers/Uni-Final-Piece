@@ -12,11 +12,13 @@ const router = createRouter({
       path: '/productPage/:id/:currencyRate/:currencyType',
       name: 'Product',
       component: () => import('../components/ProductPage.vue'),
-      props: true // props: (route) => ({
-      //   id: route.query.id,
-      //   currencyRate: route.query.currencyRate,
-      //   currencyType: route.query.currencyType
-      // })
+      props: true
+    },
+    {
+      path: '/payment/:id/:currencyRate/:currencyType',
+      name: 'Payment',
+      component: () => import('../components/Payment.vue'),
+      props: true
     },
     {
       path: '/offline',
@@ -57,11 +59,6 @@ const router = createRouter({
       path: '/MUsers',
       name: 'ManageUsers',
       component: () => import('../components/ManageUsers.vue')
-    },
-    {
-      path: '/payment',
-      name: 'Payment',
-      component: () => import('../components/Payment.vue')
     }
   ]
 });

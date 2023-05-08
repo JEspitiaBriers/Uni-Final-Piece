@@ -333,12 +333,11 @@ function quantity(value) {
 
 <style>
 #productImageBox {
-  border: 1px solid lightgrey;
-  border-radius: 15px;
+  border: 3px solid #157347;
+  border-radius: 10px;
 }
 
 #productImage {
-  /* class="rounded-4 fit" */
   border-radius: 10px;
 }
 

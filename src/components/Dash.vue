@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 import Search from '../components/Search.vue'
+
+let router = useRouter()
 
 let variables = defineProps({
   user: {
@@ -129,14 +131,7 @@ function filterResults() {
   newResults = newResults.filter(item => Number(item.Price) < maxPriceValue.value)
   newResults = newResults.filter(item => categoriesSelected.value.includes(item.Categories))
 
-  //below works for enclosures, other categories have other size measure eg. bedding and substrate is liters
   for (const item of newResults) {
-
-    /**
-     * if(item.Categories == ){
-     * }
-     * 
-     */
     if (item.Categories == "Enclosures" &&
       areaSelected.value.some(area => item.Tags.includes(area)) &&
       heightSelected.value.some(height => item.Tags.includes(height))) {
@@ -166,6 +161,15 @@ function clearAllFilters() {
   maxPriceValue.value = 1000
   itemsDisplay.value = variables.saleItems
   itemsFound.value = variables.saleItems.length
+}
+
+function buyNow(id) {
+  console.log(id)
+  router.push({ name: 'Payment', params: { id: id, currencyRate: variables.currencyRate, currencyType: variables.currencyType } })
+}
+
+function addToBasket(item) {
+
 }
 </script>
 
@@ -369,7 +373,7 @@ function clearAllFilters() {
           <div class="row">
             <div v-for="item in itemsDisplay" :key="item.id" class="col-lg-4 col-md-6 col-sm-6 d-flex">
               <div class="card w-100 my-2 shadow-2-strong">
-                <img :src="item.ImageMain" :alt="item.Alt" class="card-img-top" />
+                <!-- <img :src="item.ImageMain" :alt="item.Alt" class="card-img-top" /> -->
                 <div class="card-body d-flex flex-column">
                   <div class="d-flex flex-row">
                     <h5 class="mb-1 me-1"><router-link
@@ -382,10 +386,17 @@ function clearAllFilters() {
                   </div>
                   <p class="card-text">{{ item.Description }}</p>
                   <p class="card-text">{{ item.Dimensions }}</p>
+                    <p class="card-text">{{ item.id}}</p>
                   <p hidden>{{ item.Tags }}</p>
                   <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-                    <a href="#!" class="btn btn-success shadow-0 me-1">Buy Now</a>
-                    <a href="#!" class="btn btn-primary shadow-0 me-1">Add to Basket</a>
+                    <button class="btn btn-success">
+                      <router-link
+                        style="text-decoration: none; color: white;"
+                        :to="{ name: 'Payment', params: { id: item.id, currencyRate: currencyRate, currencyType: currencyType } }">
+                        Buy Now
+                      </router-link>
+                    </button>
+                    <button class="btn btn-primary" @click="addToBasket(item.id)">Add to Basket</button>
                     <!-- 
                         Call addToBasket()
                         Call buyNow()
@@ -427,7 +438,7 @@ function clearAllFilters() {
       <!-- sidebar + content -->
     </div>
     <!-- Footer -->
-    <footer class="text-center text-lg-start text-muted bg-primary mt-3">
+    <footer class="text-center text-lg-start text-muted mt-3">
       <!-- Section: Links  -->
       <section class="">
         <div class="text-center text-md-start pt-4 pb-4">
@@ -541,4 +552,13 @@ function clearAllFilters() {
   margin-top: 10%;
   position: fixed;
   z-index: 99;
-}</style>
+}
+
+footer {
+  background-color: #157347;
+}
+a {
+  color: #157347;
+  text-decoration: none;
+}
+</style>

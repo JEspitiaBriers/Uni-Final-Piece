@@ -139,4 +139,12 @@ async function changeCurrency(selectedCurrency) {
   width: 96%;
   padding-left: 2%;
 }
+
+.form-check-input {
+  border: 2px solid #157347;
+}
+.form-check-input:checked {
+  background-color: #157347;
+  border: 2px solid #157347;
+}
 </style>

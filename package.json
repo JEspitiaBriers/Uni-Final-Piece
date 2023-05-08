@@ -22,6 +22,7 @@
     "datatables.net-vue3": "^2.1.0",
     "firebase": "^9.18.0",
     "pinia": "^2.0.32",
+    "stripe": "^12.4.0",
     "vee-validate": "^4.8.4",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6",
