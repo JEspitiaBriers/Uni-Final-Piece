@@ -33,13 +33,19 @@ function changeSearch(searchTermInput) {
 //Category filter variables/functions
 const categoriesSelected = ref([])
 
+// BeddingAndSubstrate
+// Bedding And Substrate
+// Bedding And Substrate
+
 function filterCategories() {
   categoriesSelected.value = []
   let categoryArray = document.getElementsByClassName('categoryCheck')
   for (let i = 0; i < categoryArray.length; i++) {
     if (categoryArray[i].checked) {
       let category = (categoryArray[i].id).replace(/([A-Z])/g, ' $1').trim()
+      console.log(category)
       category = category.substring(0, category.length - 6)
+      console.log(category)
       categoriesSelected.value.push(category)
     }
   }
@@ -125,7 +131,20 @@ function filterResults() {
 
   //below works for enclosures, other categories have other size measure eg. bedding and substrate is liters
   for (const item of newResults) {
-    if (areaSelected.value.some(size => item.Tags.includes(size)) && heightSelected.value.some(size => item.Tags.includes(size))) {
+
+    /**
+     * if(item.Categories == ){
+     * }
+     * 
+     */
+    if (item.Categories == "Enclosures" &&
+      areaSelected.value.some(area => item.Tags.includes(area)) &&
+      heightSelected.value.some(height => item.Tags.includes(height))) {
+      newFilteredResults.push(item)
+    }
+    else if (item.Categories != "Enclosures" &&
+      (areaSelected.value.some(area => item.Tags.includes(area)) ||
+        heightSelected.value.some(height => item.Tags.includes(height)))) {
       newFilteredResults.push(item)
     }
   }
@@ -198,9 +217,9 @@ function clearAllFilters() {
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="BaskingAndHydrationCheck"
+                      <input class="form-check-input categoryCheck" type="checkbox" value="" id="BaskingAndHydratingCheck"
                         checked />
-                      <label class="form-check-label" for="BaskingAndHydrationCheck">
+                      <label class="form-check-label" for="BaskingAndHydratingCheck">
                         Basking and Hydrating
                       </label>
                     </div>
