@@ -25,7 +25,7 @@ let variables = defineProps({
 const itemsDisplay = ref(variables.saleItems)
 const itemsFound = ref(variables.saleItems)
 const perPage = ref(itemsFound.value.length)
-const pageCount = ref(10) //Math.ceil(itemsFound.value.length / perPage.value)
+const pageCount = ref(Math.ceil(itemsFound.value.length / perPage.value))
 const currentPage = ref(1)
 //Search variables/functions
 const searchTerm = ref("")
@@ -426,7 +426,7 @@ function addToBasket(item) {
           <!-- Pagination -->
           <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
             <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-              <input class="btn-check" type="radio" name="btnradio" id="btnradio1" ref="btnradio1" @click="(currentPage = 1), showPerPage()">
+              <input class="btn-check" type="radio" name="btnradio" id="btnradio1" ref="btnradio1" checked @click="(currentPage = 1), showPerPage()">
               <label class="btn btn-outline-success" for="btnradio1">1</label>
               <template v-for="index in pageCount - 1">
                 <input class="btn-check" type="radio" name="btnradio" :id="'btnradio' + (index + 1)" @click="(currentPage = index + 1), showPerPage()">
