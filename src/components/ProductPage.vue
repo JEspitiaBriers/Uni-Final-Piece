@@ -131,7 +131,7 @@ function quantity(value) {
           </div>
 
           <div class="d-flex justify-content-center mb-3">
-            <div v-for="image in item.images" :key="id">
+            <div v-for="image in item.images" :key="id" class="productCards">
               <img width="60" height="60" :src="item.Images" class="lowerImage" />
             </div>
           </div>
@@ -188,18 +188,18 @@ function quantity(value) {
             <div class="col-md-4 col-6 mb-3">
               <label class="mb-2 d-block">Quantity</label>
               <!-- add stock count to db -->
-              <div class="input-group mb-3" style="width: 120px;">
-                <button class="btn btn-white quantity" type="button" @click="quantity('-1')"><b>-</b></button>
-                <input type="text" class="form-control text-center border border-secondary" :value="quant" />
-                <button class="btn btn-white quantity" type="button" @click="quantity('1')"><b>+</b></button>
+              <div class="input-group mb-3 border-success" style="width: 120px;">
+                <button class="btn btn-white quantity border-success" type="button" @click="quantity('-1')"><b>-</b></button>
+                <input type="text" class="form-control text-center border border-success" :value="quant" />
+                <button class="btn btn-white quantity border-success" type="button" @click="quantity('1')"><b>+</b></button>
               </div>
             </div>
 
             <div class="col-md-5 col-6 mb-3">
               <label class="mb-2 d-block">Sub-total</label>
               <!-- add stock count to db -->
-              <div class="input-group mb-3" style="width: 120px;">
-                <input type="text" class="form-control text-center border border-secondary" :value="((item.Price * currencyRate * quant) - (item.Price * currencyRate *
+              <div class="input-group mb-3 border-success" style="width: 120px;">
+                <input type="text" class="form-control text-center border-success" :value="((item.Price * currencyRate * quant) - (item.Price * currencyRate *
                   (discount * quant))).toLocaleString(undefined, { style: 'currency', currency: currencyType })" />
               </div>
             </div>
@@ -220,7 +220,7 @@ function quantity(value) {
 
       <div class="row flex-nowrap overflow-auto">
         <div class="col-6 col-md-2" v-for="recommendation in recArray" :key="recommendation.id">
-          <div class="card w-20">
+          <div class="card w-20 productCards">
             <img :src="recommendation.ImageMain" :alt="recommendation.Alt" class="card-img-top" />
             <div class="card-body d-flex flex-column">
               <div class="d-flex flex-row">

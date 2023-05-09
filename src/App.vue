@@ -147,4 +147,17 @@ async function changeCurrency(selectedCurrency) {
   background-color: #157347;
   border: 2px solid #157347;
 }
+
+.form-select {
+  border: 1px solid #157347 ! important;
+}
+.nav-link { 
+  border: 1px solid #157347 ! important;
+  text-decoration: none;
+  color: black;
+}
+.productCards{
+  border: 1px solid #157347 ! important;
+
+}
 </style>

@@ -42,19 +42,19 @@ function changeRoute(e) {
 					</a>
 
 					<a v-if="!user" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
-						<router-link style="text-decoration: none; color: black;" to="/login" class="d-none d-md-block mb-0">
+						<router-link to="/login" class="d-none d-md-block mb-0">
 							Log in
 						</router-link>
 					</a>
 
 					<a v-if="!user" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
-						<router-link style="text-decoration: none; color: black;" to="/register" class="d-none d-md-block mb-0">
+						<router-link to="/register" class="d-none d-md-block mb-0">
 							Register
 						</router-link>
 					</a>
 
 					<a class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
-						<router-link style="text-decoration: none; color: black;" to="/" class="d-none d-md-block mb-0">
+						<router-link to="/" class="d-none d-md-block mb-0">
 							Dashboard
 						</router-link>
 					</a>
@@ -71,7 +71,7 @@ function changeRoute(e) {
 					</a>
 
 					<a v-if="user" class="border rounded py-1 px-3 nav-link d-flex align-items-center">
-						<router-link style="text-decoration: none; color: black;" to="/cart" class="d-none d-md-block mb-0">
+						<router-link to="/cart" class="d-none d-md-block mb-0">
 							Cart
 						</router-link>
 					</a>

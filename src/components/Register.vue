@@ -117,7 +117,7 @@ function home() {
 
     <div v-if="registerMessage" style="text-align: center">{{ registerMessage }}</div>
 
-    <button class="w-100 btn btn-lg btn-primary" style="margin-top: 5px" @click="register()">Register</button>
+    <button class="w-100 btn btn-lg btn-success" style="margin-top: 5px" @click="register()">Register</button>
     <router-link to="/login" style="margin: 0px 0px 0px 27%;">Already have an account?</router-link>
 
   </div>
