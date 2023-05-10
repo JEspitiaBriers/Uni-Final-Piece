@@ -159,6 +159,17 @@ function clearAllFilters() {
   showPerPage()
 }
 
+function sortResults(e) {
+  if (e == "High - Low") {
+    itemsFound.value.sort((first, second) => second.Price - first.Price)
+    showPerPage()
+  }
+  else if (e == "Low - High") {
+    itemsFound.value.sort((first, second) => first.Price - second.Price)
+    showPerPage()
+  }
+}
+
 function showPerPage() {
   if (perPage == itemsFound.value.length) {
     itemsDisplay.value = itemsFound.value
@@ -368,26 +379,21 @@ function addToBasket(item) {
                 <option value="3">27</option>
                 <option :value="itemsFound.length">All</option>
               </select>
-              <select class="form-select d-inline-block w-auto border pt-1">
-                <option value="0">Best match</option>
-                <option value="1">Recommended</option>
-                <option value="2">High rated</option>
-                <option value="3">Randomly</option>
+
+              <label style="margin: 0px 5px 0px 5px">Sort By:</label>
+              <select class="form-select d-inline-block w-auto border pt-1" 
+                style="margin-right: 5px; width: 70px"
+                @change="sortResults($event.target.value)">
+                <option value="No Sort" selected>No Sort</option>
+                <option value="Low - High">Price Low - High</option>
+                <option value="High - Low">Price High - Low</option>
               </select>
-              <div class="btn-group shadow-0 border">
-                <a href="#" class="btn btn-light" title="List view">
-                  <i class="fa fa-bars fa-lg"></i>
-                </a>
-                <a href="#" class="btn btn-light active" title="Grid view">
-                  <i class="fa fa-th fa-lg"></i>
-                </a>
-              </div>
             </div>
           </header>
 
           <div class="row">
             <div v-for="item in itemsDisplay" :key="item.id" class="col-lg-4 col-md-6 col-sm-6 d-flex">
-              <div class="card w-100 my-2 shadow-2-strong">
+              <div class="card w-100 my-2 shadow-2-strong productCards">
                 <!-- <img :src="item.ImageMain" :alt="item.Alt" class="card-img-top" /> -->
                 <div class="card-body d-flex flex-column">
                   <div class="d-flex flex-row">
@@ -395,14 +401,14 @@ function addToBasket(item) {
                         :to="{ name: 'Product', params: { id: item.id, currencyRate: currencyRate, currencyType: currencyType } }">{{
                           item.Title }}</router-link></h5>
                     <br>
-                    <h6>{{ (item.Price * currencyRate).toLocaleString(
-                      undefined, { style: "currency", currency: currencyType })
-                    }}</h6>
                   </div>
                   <p class="card-text">{{ item.Description }}</p>
                   <p class="card-text">{{ item.Dimensions }}</p>
-                  <div class="card-footer d-flex align-items-end pt-3 px-0 pb-0 mt-auto">
-                    <button class="btn btn-success">
+                  <h5>{{ (item.Price * currencyRate).toLocaleString(
+                    undefined, { style: "currency", currency: currencyType })
+                  }}</h5>
+                  <div class="card-footer d-flex align-items-end pt-2 px-2 pb-2 mt-auto">
+                    <button class="btn btn-success" style="margin: auto">
                       <router-link style="text-decoration: none; color: white;"
                         :to="{ name: 'Payment', params: { id: item.id, currencyRate: currencyRate, currencyType: currencyType } }">
                         Buy Now

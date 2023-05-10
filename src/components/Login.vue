@@ -64,7 +64,7 @@ function resetPassword() {
 
     <div v-if="loginMessage" style="text-align: center">{{ loginMessage }}</div>
 
-    <button class="w-100 btn btn-lg btn-primary" style="margin-top: 5px" @click="login()">Login</button>
+    <button class="w-100 btn btn-lg btn-success" style="margin-top: 5px" @click="login()">Login</button>
     <button class="w-50 btn btn-sm btn-secondary" style="margin: 3px 0px 0px 25%;" @click="resetPassword()">Reset
       Password</button>
     <router-link to="/register" style="margin: 0px 0px 0px 34%;">Need to register?</router-link>
