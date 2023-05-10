@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 import { watch, computed, ref } from 'vue'
 
 let variables = defineProps({
-	userItems: {
+	user: {
 		type: Object,
 		default: () => { }
 	},
@@ -59,21 +59,18 @@ function changeRoute(e) {
 						</router-link>
 					</a>
 
-					<a v-if="user">
-						<select class="form-select d-inline-block w-auto border pt-1" @change="changeRoute($event)">
-							<option selected :value="currentPage">Hello, {{ userItems.Firstname }}</option>
-							<option value="manage">Manage Account</option>
-							<option value="analysis">Analysis</option> <!-- v-if="isAdmin()" -->
-							<option value="addProduct">Add Product</option> <!-- v-if="isAdmin()" -->
-							<option value="wishlist">Wishlist</option>
-							<option @click="$emit('logout')">Logout</option>
-						</select>
-					</a>
-
-					<a v-if="user" class="border rounded py-1 px-3 nav-link d-flex align-items-center">
+					<a v-if="user" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
 						<router-link to="/cart" class="d-none d-md-block mb-0">
 							Cart
 						</router-link>
+					</a>
+					
+					<a v-if="user">
+						<select class="form-select d-inline-block w-auto border pt-1" @change="changeRoute($event.target.value)">
+							<option selected :value="currentPage">Hello, {{ user.displayName }}</option>
+							<option value="manage">Manage Account</option>
+							<option @click="$emit('logout')">Logout</option>
+						</select>
 					</a>
 
 				</div>

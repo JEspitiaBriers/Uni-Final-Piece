@@ -6,6 +6,12 @@ import { validateEmail, checkPasswordLength } from '../assets/utils.js'
 import { firebaseAuthentication, signInWithEmailAndPassword } from '@/firebase/database'
 import { useRouter } from 'vue-router'
 
+let userProp = defineProps({
+  user: {
+    type: Object
+  }
+})
+
 const email = ref('')
 const password = ref('')
 const loginMessage = ref(null)
@@ -24,7 +30,6 @@ function passwordToggle() {
 function login() {
   signInWithEmailAndPassword(firebaseAuthentication, email.value, password.value)
     .then((userCredential) => {
-      console.log(userCredential.user)
       router.push("/")
     },
       (error) => {
@@ -40,10 +45,15 @@ function login() {
 function resetPassword() {
   router.push('/resetpassword')
 }
+
 </script>
 
 <template>
   <div class="onPage" id="loginPage">
+
+    <template v-if="user">{{ user }}</template>
+        <template v-else>ELSE TEST</template>
+
     <template v-if="!user">
       <h2 style="text-align: center">Login</h2>
 
@@ -70,11 +80,6 @@ function resetPassword() {
       <button class="w-50 btn btn-sm btn-secondary" style="margin: 3px 0px 0px 25%;" @click="resetPassword()">Reset
         Password</button>
       <router-link to="/register" style="margin: 0px 0px 0px 34%;">Need to register?</router-link>
-    </template>
-    <template v-else>
-      <h2 style="text-align: center">You're already logged in.</h2>
-      <p>Don't worry, you can click this button to head to the dashboard!</p>
-      <button class="w-50 btn btn-sm btn-secondary" style="margin: 3px 0px 0px 25%;" to="/">Home Page</button>
     </template>
   </div>
 </template>

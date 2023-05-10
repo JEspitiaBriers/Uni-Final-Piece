@@ -63,9 +63,10 @@ async function register() {
           updateProfile(firebaseAuthentication.currentUser, {
             firstName: firstname.value,
             surname: surname.value,
-            DOB: DoB.value
-          }).then(() => {
-            router.push('/login')
+            DOB: DoB.value,
+            displayName: firstname.value
+          }, console.log(user)).then(() => {
+            router.push('/')
           })
         )
         .catch((error) => {

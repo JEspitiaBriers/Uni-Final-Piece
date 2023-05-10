@@ -7,6 +7,9 @@ let router = useRouter()
 
 let variables = defineProps({
   user: {
+    type: Object
+  },
+  userItems: {
     type: Object,
     default: () => { }
   },
@@ -201,12 +204,9 @@ function addToBasket(item) {
 
   <div class="onPage" id="fade">
     <div style="padding: 20px 5px 0px 5px">
-      <!-- sidebar + content -->
-      <!-- <section class=""> -->
+      <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
       <div class="row">
-        <!-- sidebar -->
         <div class="col-lg-3">
-          <!-- Toggle button -->
           <button class="btn btn-outline-secondary w-100 d-lg-none show-filters" type="button" data-bs-toggle="collapse"
             data-bs-target="#saleFilters" aria-controls="saleFilters" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -443,8 +443,7 @@ function addToBasket(item) {
           <!-- Pagination -->
         </div>
       </div>
-      <!-- </section> -->
-      <!-- sidebar + content -->
+      <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
     </div>
     <!-- Footer -->
     <footer class="text-center text-lg-start text-muted mt-3">

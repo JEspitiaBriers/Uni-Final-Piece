@@ -64,8 +64,11 @@ onMounted(async () => {
 const user = ref(null)
 onAuthStateChanged(firebaseAuthentication, (currentUser) => {
   if (currentUser) {
+    console.log('currentUser')
+    console.log(currentUser)
     user.value = currentUser
   } else {
+    console.log('logged out')
     user.value = null
   }
 })
@@ -75,7 +78,7 @@ function logout() {
   signOut(firebaseAuthentication).then(
     () => {
       user.value = null
-      router.push("/login")
+      router.push("/")
     },
     (error) => {
       errorLogout.value = error.message
@@ -121,9 +124,9 @@ async function changeCurrency(selectedCurrency) {
 </script>
 
 <template>
-  <Navigation :userItems="userItems" @change-currency="changeCurrency" @logout="logout" />
+  <Navigation :user="user" :userItems="userItems" @change-currency="changeCurrency" @logout="logout" />
   <div v-if="loaded">
-    <RouterView :userItems="userItems" :saleItems="saleItems" :currencyType="currencyType" :currencyRate="currencyRate" />
+    <RouterView :user="user" :userItems="userItems" :saleItems="saleItems" :currencyType="currencyType" :currencyRate="currencyRate" /> 
   </div>
 </template>
 
