@@ -49,16 +49,6 @@ const router = createRouter({
       path: '/addProduct',
       name: 'AddProduct',
       component: () => import('../components/AddProduct.vue')
-    },
-    {
-      path: '/MSaleItems',
-      name: 'ManageSaleItems',
-      component: () => import('../components/ManageSaleItems.vue')
-    },
-    {
-      path: '/MUsers',
-      name: 'ManageUsers',
-      component: () => import('../components/ManageUsers.vue')
     }
   ]
 });
