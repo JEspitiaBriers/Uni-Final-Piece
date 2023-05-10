@@ -18,7 +18,8 @@ const DoB = ref("")
 const email = ref("")
 const password = ref("")
 const passConfirm = ref("")
-const registerMessage = ref('')
+const registerMessage = ref("")
+// const userCredential = ref("")
 
 const router = useRouter()
 
@@ -49,11 +50,17 @@ function register() {
     if (password.value == passConfirm.value) {
       createUserWithEmailAndPassword(firebaseAuthentication,
         email.value, password.value)
-        .then((userCredentials) => setDoc(doc()), {
-          userCredentials.firstName = firstname.value
-          userCredentials.surname = surname.value
-          userCredentials.DOB = DoB.value
+        .then((userCredentials) => setDoc(collection(firebaseFireStore, 'Users', userCredentials.uid), {
+          Firstname: firstname.value,
+          Surname: surname.value,
+          Email: email.value,
+          DOB: DoB.value,
+          Created: serverTimestamp()
         })
+          // userCredentials.firstName = firstname.value,
+          // userCredentials.surname = surname.value,
+          // userCredentials.DOB = DoB.value,
+        )
         .then(() =>
           updateProfile(firebaseAuthentication.currentUser, {
             firstName: firstname.value,
