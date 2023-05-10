@@ -22,7 +22,6 @@ const email = ref("")
 const password = ref("")
 const passConfirm = ref("")
 const registerMessage = ref("")
-// const userCredential = ref("")
 
 const router = useRouter()
 
@@ -60,11 +59,6 @@ async function register() {
         DOB: DoB.value,
         Created: serverTimestamp()
       })
-      // .then((userCredentials) => 
-      //     // userCredentials.firstName = firstname.value,
-      //     // userCredentials.surname = surname.value,
-      //     // userCredentials.DOB = DoB.value,
-      //   )
         .then(() =>
           updateProfile(firebaseAuthentication.currentUser, {
             firstName: firstname.value,
@@ -115,8 +109,8 @@ function home() {
       :rules="checkPasswordLength" />
 
     <label>Confirm Password</label>
-    <input class="form-control passChecks" required v-model="passConfirm" type="password" placeholder="Password" rules="required|confirmed:password"
-      :rules="checkPasswordLength" />
+    <input class="form-control passChecks" required v-model="passConfirm" type="password" placeholder="Password"
+      rules="required|confirmed:password" :rules="checkPasswordLength" />
 
     <div class="input-group" style="margin-top: 3px; margin-left: 25%;">
       <div class="input-group-text">
