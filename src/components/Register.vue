@@ -48,22 +48,23 @@ function getAge(dateString) {
   return age;
 }
 
-function register() {
+async function register() {
   if (getAge(DoB.value) > 18) {
     if (password.value == passConfirm.value) {
-      createUserWithEmailAndPassword(firebaseAuthentication,
-        email.value, password.value)
-        .then((userCredentials) => setDoc(collection(firebaseFireStore, 'Users', userCredentials.uid), {
-          Firstname: firstname.value,
-          Surname: surname.value,
-          Email: email.value,
-          DOB: DoB.value,
-          Created: serverTimestamp()
-        })
-          // userCredentials.firstName = firstname.value,
-          // userCredentials.surname = surname.value,
-          // userCredentials.DOB = DoB.value,
-        )
+      const { user } = await createUserWithEmailAndPassword(firebaseAuthentication, email.value, password.value)
+      console.log(user.uid)
+      setDoc(doc(firebaseFireStore, 'Users', user.uid), {
+        Firstname: firstname.value,
+        Surname: surname.value,
+        Email: email.value,
+        DOB: DoB.value,
+        Created: serverTimestamp()
+      })
+      // .then((userCredentials) => 
+      //     // userCredentials.firstName = firstname.value,
+      //     // userCredentials.surname = surname.value,
+      //     // userCredentials.DOB = DoB.value,
+      //   )
         .then(() =>
           updateProfile(firebaseAuthentication.currentUser, {
             firstName: firstname.value,
