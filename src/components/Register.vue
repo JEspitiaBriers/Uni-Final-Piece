@@ -12,23 +12,24 @@ import {
 
 defineEmits(['register-clicked'])
 
+const firstname = ref("")
+const surname = ref("")
+const DoB = ref("")
+const email = ref("")
+const password = ref("")
+const passConfirm = ref("")
 const registerMessage = ref('')
 
 const router = useRouter()
 
 function passwordToggle() {
-  var password = document.getElementById("registerPassword");
-  if (password.type === "password") {
-    password.type = "text";
-  } else {
-    password.type = "password";
-  }
-
-  var confirm = document.getElementById("registerPassCon");
-  if (confirm.type === "password") {
-    confirm.type = "text";
-  } else {
-    confirm.type = "password";
+  var passChecks = document.getElementsByClassName("passChecks");
+  for (let i = 0; i < passChecks.length; i++) {
+    if (passChecks[i].type === "password") {
+      passChecks[i].type = "text";
+    } else {
+      passChecks[i].type = "password";
+    }
   }
 }
 
@@ -44,20 +45,20 @@ function getAge(dateString) {
 }
 
 function register() {
-  if (getAge(document.getElementById('registerDOB').value) > 18) {
-    if (document.getElementById("registerPassword").value == document.getElementById("registerPassCon").value) {
+  if (getAge(DoB.value) > 18) {
+    if (password.value == passConfirm.value) {
       createUserWithEmailAndPassword(firebaseAuthentication,
-        document.getElementById('registerEmail').value, document.getElementById('registerPassword').value)
-        .then((userCredentials) => {
-          userCredentials.firstName = document.getElementById('registerFirstnames').value
-          userCredentials.surname = document.getElementById('registerSurnames').value
-          userCredentials.DOB = document.getElementById('registerDOB').value
+        email.value, password.value)
+        .then((userCredentials) => setDoc(doc()), {
+          userCredentials.firstName = firstname.value
+          userCredentials.surname = surname.value
+          userCredentials.DOB = DoB.value
         })
         .then(() =>
           updateProfile(firebaseAuthentication.currentUser, {
-            firstName: document.getElementById('registerFirstnames').value,
-            surname: document.getElementById('registerSurnames').value,
-            DOB: document.getElementById('registerDOB').value
+            firstName: firstname.value,
+            surname: surname.value,
+            DOB: DoB.value
           }).then(() => {
             router.push('/login')
           })
@@ -86,24 +87,24 @@ function home() {
     <h2 style="text-align: center">Register</h2>
 
     <label>Firstnames</label>
-    <input class="form-control" required id="registerFirstnames" type="text" placeholder="Your firstnames" />
+    <input class="form-control" required v-model="firstname" type="text" placeholder="Your firstnames" />
 
     <label>Surnames</label>
-    <input class="form-control" required id="registerSurnames" type="text" placeholder="Your surnames" />
+    <input class="form-control" required v-model="surname" type="text" placeholder="Your surnames" />
 
     <label>Date of Birth</label>
-    <input class="form-control" required id="registerDOB" type="date" />
+    <input class="form-control" required v-model="DoB" type="date" />
 
     <label>Email</label>
-    <input class="form-control" required id="registerEmail" type="email" placeholder="eg. some.fancy@email.com"
+    <input class="form-control" required v-model="email" type="email" placeholder="eg. some.fancy@email.com"
       :rules="validateEmail" />
 
     <label>Password</label>
-    <input class="form-control" required id="registerPassword" type="password" placeholder="Password"
+    <input class="form-control passChecks" required v-model="password" type="password" placeholder="Password"
       :rules="checkPasswordLength" />
 
     <label>Confirm Password</label>
-    <input class="form-control" required id="registerPassCon" type="password" placeholder="Password" rules="required|confirmed:password"
+    <input class="form-control passChecks" required v-model="passConfirm" type="password" placeholder="Password" rules="required|confirmed:password"
       :rules="checkPasswordLength" />
 
     <div class="input-group" style="margin-top: 3px; margin-left: 25%;">
