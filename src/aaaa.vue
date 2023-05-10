@@ -36,29 +36,13 @@ onMounted(async () => {
       Dimensions: doc.data().Dimensions,
       ImageMain: doc.data().ImageMain,
       Images: doc.data().Images,
-      Categories: doc.data().Categories
+      Categories: doc.data().Categories,
+      StripeID: doc.data().StripeID,
     }
     SaleItems.push(saleItem)
   })
   saleItems.value = SaleItems
   loaded = true
-})
-
-const userItems = ref([])
-onMounted(async () => {
-  const querySnapshot = await getDocs(collection(firebaseFireStore, "Users"))
-  let fbUsers = [];
-  querySnapshot.forEach((doc) => {
-    const user = {
-      id: doc.id,
-      Firstname: doc.data().Firstname,
-      Surname: doc.data().Surname,
-      Email: doc.data().Email,
-      DOB: doc.data().DOB
-    }
-    fbUsers.push(user)
-  })
-  userItems.value = fbUsers
 })
 
 const user = ref(null)
@@ -121,9 +105,9 @@ async function changeCurrency(selectedCurrency) {
 </script>
 
 <template>
-  <Navigation :userItems="userItems" @change-currency="changeCurrency" @logout="logout" />
+  <Navigation :user="user" @change-currency="changeCurrency" @logout="logout" />
   <div v-if="loaded">
-    <RouterView :userItems="userItems" :saleItems="saleItems" :currencyType="currencyType" :currencyRate="currencyRate" />
+    <RouterView :user="user" :saleItems="saleItems" :currencyType="currencyType" :currencyRate="currencyRate" />
   </div>
 </template>
 
@@ -161,3 +145,4 @@ async function changeCurrency(selectedCurrency) {
 
 }
 </style>
+
