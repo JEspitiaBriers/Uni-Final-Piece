@@ -5,10 +5,13 @@ import { useRouter } from 'vue-router'
 import { validateEmail, checkPasswordLength } from '../assets/utils.js'
 
 import {
+  firebaseFireStore,
   firebaseAuthentication,
   createUserWithEmailAndPassword,
-  updateProfile
+  updateProfile,
+  serverTimestamp
 } from '@/firebase/database'
+import { collection, doc, setDoc, updateDoc, getDocs, addDoc } from '@firebase/firestore';
 
 defineEmits(['register-clicked'])
 
