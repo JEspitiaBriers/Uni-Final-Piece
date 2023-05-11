@@ -51,7 +51,6 @@ async function register() {
   if (getAge(DoB.value) > 18) {
     if (password.value == passConfirm.value) {
       const { user } = await createUserWithEmailAndPassword(firebaseAuthentication, email.value, password.value)
-      console.log(user.uid)
       setDoc(doc(firebaseFireStore, 'Users', user.uid), {
         Firstname: firstname.value,
         Surname: surname.value,
@@ -65,12 +64,11 @@ async function register() {
             surname: surname.value,
             DOB: DoB.value,
             displayName: firstname.value
-          }, console.log(user)).then(() => {
+          }).then(() => {
             router.push('/')
           })
         )
         .catch((error) => {
-          console.log(error.message)
           registerMessage.value = error.message.substring(error.message.indexOf("/") + 1, error.message.length - 2)
         })
     }

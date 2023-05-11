@@ -101,25 +101,26 @@ let currencyRate = ref(1)
 async function changeCurrency(selectedCurrency) {
   currencyType.value = selectedCurrency
 
-  if (currencyType != 'GBP' && typeof currencyType !== 'undefined') {
-    let currencyData;
-    console.log("Called and is " + currencyType)
+  // if (currencyType != 'GBP' && typeof currencyType !== 'undefined') {
+  //   let currencyData;
+  //   console.log("Called and is " + currencyType)
 
-    document.getElementById("loadingCurrency").style.display = "block";
-    document.getElementById("fade").style.opacity = "25%";
+  //   document.getElementById("loadingCurrency").style.display = "block";
+  //   document.getElementById("fade").style.opacity = "25%";
 
-    const currencyResponse = await fetch("https://api.apilayer.com/exchangerates_data/convert?to=" + currencyType.value + "&from=GBP&amount=1", requestOptions)
+  //   const currencyResponse = await fetch("https://api.apilayer.com/exchangerates_data/convert?to=" + currencyType.value + "&from=GBP&amount=1", requestOptions)
 
-    currencyData = await currencyResponse.json()
+  //   currencyData = await currencyResponse.json()
 
-    document.getElementById("loadingCurrency").style.display = "none";
-    document.getElementById("fade").style.opacity = "100%";
+  //   document.getElementById("loadingCurrency").style.display = "none";
+  //   document.getElementById("fade").style.opacity = "100%";
 
-    currencyRate.value = currencyData.result
-  }
-  else {
-    return "1"
-  }
+  //   currencyRate.value = currencyData.result
+  // }
+  // else {
+  //   return "1"
+  // }
+  // console.log(currencyType.value)
 }
 </script>
 
