@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from 'firebase/app'
+import { initializeApp } from 'firebase/app';
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -9,8 +9,8 @@ import {
   signOut,
   updateProfile,
   updatePassword,
-  sendPasswordResetEmail,
-} from 'firebase/auth'
+  sendPasswordResetEmail
+} from 'firebase/auth';
 import {
   getFirestore,
   serverTimestamp,
@@ -21,25 +21,23 @@ import {
   deleteDoc,
   getDocs,
   setDoc
-} from 'firebase/firestore'
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+} from 'firebase/firestore';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCUbVYtLm-8IpQgfadI_iOYdNiphfSzg6A",
-  authDomain: "creativepiece-3e74f.firebaseapp.com",
-  projectId: "creativepiece-3e74f",
-  storageBucket: "creativepiece-3e74f.appspot.com",
-  messagingSenderId: "175217212348",
-  appId: "1:175217212348:web:edfcb21596f156cfee09b9"
+  apiKey: 'AIzaSyCUbVYtLm-8IpQgfadI_iOYdNiphfSzg6A',
+  authDomain: 'creativepiece-3e74f.firebaseapp.com',
+  projectId: 'creativepiece-3e74f',
+  storageBucket: 'creativepiece-3e74f.appspot.com',
+  messagingSenderId: '175217212348',
+  appId: '1:175217212348:web:edfcb21596f156cfee09b9'
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig)
-const firebaseAuthentication = getAuth()
-const firebaseFireStore = getFirestore()
-const timestamp = serverTimestamp()
+const app = initializeApp(firebaseConfig);
+const firebaseAuthentication = getAuth();
+const firebaseFireStore = getFirestore();
+const timestamp = serverTimestamp();
 
 export {
   app,
@@ -62,4 +60,4 @@ export {
   deleteDoc,
   getDocs,
   setDoc
-}
+};
