@@ -51,7 +51,7 @@ onMounted(async () => {
     if (snapshot.exists()) {
       item.value = snapshot.data()
       console.log("-- success --")
-      
+
     } else {
       console.log("Document does not exist")
     }
@@ -129,8 +129,7 @@ function quantity(value) {
         <div class="col-lg-1"></div>
         <div class="col-lg-4">
           <div class="mb-3 d-flex justify-content-center" id="productImageBox">
-            <img style="max-width: 100%; max-height: 100vh; margin: auto;" id="productImage"
-              src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/items/detail1/big1.webp" />
+            <img style="max-width: 100%; max-height: 100vh; margin: auto;" id="productImage" :src="item.ImageMain" />
           </div>
 
           <div class="d-flex justify-content-center mb-3">
@@ -144,7 +143,10 @@ function quantity(value) {
           <h3> {{ item.Title }} </h3> <br>
 
           <div class="mb-3">
-            <span class="h5">{{ ((item.Price * currencyRate)).toLocaleString(undefined, { style: "currency", currency: currencyType }) }}</span>
+            <span class="h5">{{ ((item.Price * currencyRate)).toLocaleString(undefined, {
+              style: "currency", currency:
+                currencyType
+            }) }}</span>
             <span class="text-muted">/unit</span>
           </div>
 
@@ -191,9 +193,11 @@ function quantity(value) {
               <label class="mb-2 d-block">Quantity</label>
               <!-- add stock count to db -->
               <div class="input-group mb-3 border-success" style="width: 120px;">
-                <button class="btn btn-white quantity border-success" type="button" @click="quantity('-1')"><b>-</b></button>
-                <input type="text" class="form-control text-center border border-success" :value="quant" disabled/>
-                <button class="btn btn-white quantity border-success" type="button" @click="quantity('1')"><b>+</b></button>
+                <button class="btn btn-white quantity border-success" type="button"
+                  @click="quantity('-1')"><b>-</b></button>
+                <input type="text" class="form-control text-center border border-success" :value="quant" disabled />
+                <button class="btn btn-white quantity border-success" type="button"
+                  @click="quantity('1')"><b>+</b></button>
               </div>
             </div>
 
@@ -201,12 +205,13 @@ function quantity(value) {
               <label class="mb-2 d-block">Sub-total</label>
               <!-- add stock count to db -->
               <div class="input-group mb-3 border-success" style="width: 120px;">
-                <input type="text" class="form-control text-center border-success" :value="((item.Price * currencyRate * quant)).toLocaleString(undefined, { style: 'currency', currency: currencyType })" />
+                <input type="text" class="form-control text-center border-success"
+                  :value="((item.Price * currencyRate * quant)).toLocaleString(undefined, { style: 'currency', currency: currencyType })" />
               </div>
             </div>
             <div class="col-md-7">
               <router-link style="text-decoration: none; color: white; margin-right: 5px;"
-                :to="{ name: 'Payment', params: { id: item.StripePriceId.substring(6), quantity: quant} }">
+                :to="{ name: 'Payment', params: { id: item.StripePriceId.substring(6), quantity: quant } }">
                 <button class="btn btn-success">
                   Buy Now
                 </button>
@@ -218,36 +223,26 @@ function quantity(value) {
         </div>
 
         <div class="row" id="productRecs">
-          <p>
-            Lets write something here to see if its working now
-            <!-- See Script COMMMENT 1 for getDocs()
-            <div v-for="recommendations in recArray">
-              bootsrap card with product image, title and price
-            </div> -->
-
-      <div class="row flex-nowrap overflow-auto">
-        <div class="col-6 col-md-2" v-for="recommendation in recArray" :key="recommendation.id">
-          <div class="card w-20 productCards">
-            <img :src="recommendation.ImageMain" :alt="recommendation.Alt" class="card-img-top" />
-            <div class="card-body d-flex flex-column">
-              <div class="d-flex flex-row">
-                <h5 class="mb-1 me-1"><router-link
-                  :to="{ name: 'Product', params: { id: recommendation.id, currencyRate: currencyRate, currencyType: currencyType } }">{{
-                  recommendation.Title }}</router-link></h5>
-                <br>
-                <h6>{{ (recommendation.Price * currencyRate).toLocaleString(
-                  undefined, { style: "currency", currency: currencyType })
-                }}</h6>
+          <div class="row flex-nowrap overflow-auto">
+            <div class="col-6 col-md-2" v-for="recommendation in recArray" :key="recommendation.id">
+              <div class="card w-20 productCards">
+                <img :src="recommendation.ImageMain" :alt="recommendation.Alt" class="card-img-top" />
+                <div class="card-body d-flex flex-column">
+                  <div class="d-flex flex-row">
+                    <h5 class="mb-1 me-1"><router-link
+                        :to="{ name: 'Product', params: { id: recommendation.id, currencyRate: currencyRate, currencyType: currencyType } }">{{
+                          recommendation.Title }}</router-link></h5>
+                    <br>
+                    <h6>{{ (recommendation.Price * currencyRate).toLocaleString(
+                      undefined, { style: "currency", currency: currencyType })
+                    }}</h6>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-          </p>
-
-        </div>
-      </div>
-      <!-- content -->
 
       <div id="productBottom">
         <div class="container">
@@ -269,7 +264,6 @@ function quantity(value) {
         </div>
       </div>
     </div>
-    <!-- </div> -->
     <div v-else>
       Loading...
     </div>
@@ -321,5 +315,4 @@ function quantity(value) {
     border-radius: 15px;
     padding-left: 5px;
   }
-}
-</style>
+}</style>

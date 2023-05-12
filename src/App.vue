@@ -41,6 +41,8 @@ onMounted(async () => {
       StripeID: doc.data().StripeID,
       StripePriceId: doc.data().StripePriceId,
     }
+    console.log(saleItem.ImageMain)
+    console.log(String(saleItem.ImageMain))
     SaleItems.push(saleItem)
   })
   saleItems.value = SaleItems
@@ -141,7 +143,7 @@ async function changeCurrency(selectedCurrency) {
 
 <style>
 .onPage {
-  padding-top: 70px;
+  padding-top: 80px;
 }
 
 .dataTablePage {
@@ -169,7 +171,7 @@ async function changeCurrency(selectedCurrency) {
 }
 
 .productCards {
-  border: 1px solid #157347 ! important;
+  border: 2px solid #157347 ! important;
 
 }
 </style>

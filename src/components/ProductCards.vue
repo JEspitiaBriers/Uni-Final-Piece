@@ -28,7 +28,7 @@ let variables = defineProps({
 <template>
   <div v-for="item in itemsDisplay" :key="item.id" class="col-lg-4 col-md-6 col-sm-6 d-flex">
     <div class="card w-100 my-2 shadow-2-strong productCards">
-      <!-- <img :src="item.ImageMain" :alt="item.Alt" class="card-img-top" /> -->
+      <img :src="item.ImageMain" :alt="item.Alt" class="card-img-top" style="border-bottom: 2px solid #157347"/>
       <div class="card-body d-flex flex-column">
         <div class="d-flex flex-row">
           <h5 class="mb-1 me-1"><router-link

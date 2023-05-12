@@ -25,8 +25,8 @@ function changeRoute(e) {
 			<div class="container-fluid">
 				<!-- Logo and Title -->
 				<router-link to="/">
-					<img class="titleLogo" src="@/components/imgs/LizardLogo.png" height="50" alt="Lizard logo" loading="lazy" />
-					<h1 class="titleLogo" style="color:black">Reptiles Recluse</h1>
+					<img class="titleLogo" src="@/assets/ReptileRecluseLogo.png" height="70" alt="Lizard logo" loading="lazy" />
+					<h4 class="titleLogo">Improve your Reptiles Home</h4>
 				</router-link>
 
 				<div class="d-flex float-end">
