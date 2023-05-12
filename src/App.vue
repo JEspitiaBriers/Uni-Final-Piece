@@ -41,8 +41,6 @@ onMounted(async () => {
       StripeID: doc.data().StripeID,
       StripePriceId: doc.data().StripePriceId,
     }
-    console.log(saleItem.ImageMain)
-    console.log(String(saleItem.ImageMain))
     SaleItems.push(saleItem)
   })
   saleItems.value = SaleItems
@@ -69,11 +67,8 @@ onMounted(async () => {
 const user = ref(null)
 onAuthStateChanged(firebaseAuthentication, (currentUser) => {
   if (currentUser) {
-    console.log('currentUser')
-    console.log(currentUser)
     user.value = currentUser
   } else {
-    console.log('logged out')
     user.value = null
   }
 })
@@ -97,7 +92,6 @@ axios.get("http://localhost:4242/api/key")
     myHeaders.append("apikey", response.data);
   })
   .catch(error => {
-    console.error(error);
   });
 
 let requestOptions = {
@@ -112,25 +106,24 @@ let currencyRate = ref(1)
 async function changeCurrency(selectedCurrency) {
   currencyType.value = selectedCurrency
 
-  // if (currencyType != 'GBP' && typeof currencyType !== 'undefined') {
-  //   let currencyData;
-  //   console.log("Called and is " + currencyType.value)
+  if (currencyType != 'GBP' && typeof currencyType !== 'undefined') {
+    let currencyData;
 
-  //   document.getElementById("loadingCurrency").style.display = "block";
-  //   document.getElementById("fade").style.opacity = "25%";
+    document.getElementById("loadingCurrency").style.display = "block";
+    document.getElementById("fade").style.opacity = "25%";
 
-  //   const currencyResponse = await fetch("https://api.apilayer.com/exchangerates_data/convert?to=" + currencyType.value + "&from=GBP&amount=1", requestOptions)
+    const currencyResponse = await fetch("https://api.apilayer.com/exchangerates_data/convert?to=" + currencyType.value + "&from=GBP&amount=1", requestOptions)
 
-  //   currencyData = await currencyResponse.json()
+    currencyData = await currencyResponse.json()
 
-  //   document.getElementById("loadingCurrency").style.display = "none";
-  //   document.getElementById("fade").style.opacity = "100%";
+    document.getElementById("loadingCurrency").style.display = "none";
+    document.getElementById("fade").style.opacity = "100%";
 
-  //   currencyRate.value = currencyData.result
-  // }
-  // else {
-  //   return "1"
-  // }
+    currencyRate.value = currencyData.result
+  }
+  else {
+    return "1"
+  }
 }
 </script>
 
@@ -139,6 +132,9 @@ async function changeCurrency(selectedCurrency) {
   <div v-if="loaded">
     <RouterView :user="user" :userItems="userItems" :saleItems="saleItems" :currencyType="currencyType" :currencyRate="currencyRate" /> 
   </div>
+  <footer class="text-center text-lg-start text-muted mt-3">
+    <AppFooter />
+  </footer>
 </template>
 
 <style>
