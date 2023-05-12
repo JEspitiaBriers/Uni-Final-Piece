@@ -82,12 +82,12 @@ function quantity(value, base) {
               shopping!</h5>
           </div>
           <div v-else>
-            <router-link style="text-decoration: none; color: white; margin-right: 5px;"
+            <!-- <router-link style="text-decoration: none; color: white; margin-right: 5px;"
               :to="{ name: 'Payment', params: { id: `${basketIDs}`, quantity: `${quantArray}` } }">
               <button class="btn btn-success">
                 Buy Now
-              </button>
-            </router-link>
+              </button> 
+            </router-link> -->
 
             <!-- Display cards for each item in basket -->
             <div v-for="(item, index) in basketItems" :key="index">
@@ -95,9 +95,11 @@ function quantity(value, base) {
                 <img :src="item.ImageMain" :alt="item.Alt" class="card-img-top" style="border-right: 2px solid #157347" />
                 <div class="card-body d-flex flex-column">
                   <div class="d-flex flex-row">
-                    <h5 class="mb-1 me-1"><router-link
+                    <h5 class="mb-1 me-1">
+                      <router-link
                         :to="{ name: 'Product', params: { id: item.id, currencyRate: currencyRate, currencyType: currencyType } }">{{
-                          item.Title }}</router-link></h5>
+                          item.Title }}</router-link>
+                          </h5>
                     <br>
                   </div>
                   <p class="card-text">{{ item.Description.substring(0, 150) }}...</p>
@@ -123,6 +125,7 @@ function quantity(value, base) {
                         <button class="btn btn-white quantity border-success" type="button"
                           @click="quantity('1', quantArray[index])"><b>+</b></button>
                       </div>
+                      <p>See code for explaination of desired function</p>
                     </div>
                   </div>
                 </div>
