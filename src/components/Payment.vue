@@ -1,6 +1,6 @@
 <template>
   <div class="onPage">
-    <h1>STRIPE INTEGRATION TEST</h1>
+    <h1 id="loadingPurchase">Loading Purchase Page</h1>
     <StripeCheckout 
     ref="refCheckout"
     mode="payment"
@@ -8,14 +8,13 @@
     :lineItems="purchaseItems"
     :successURL="sucessURL"
     :cancelURL="cancelURL"/>
-    <button @click="toPayment">Checkout</button>
   </div>
 </template>
 
 
 <script setup>
 import { StripeCheckout } from '@vue-stripe/vue-stripe'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 
 const publishStripeKey = 'pk_test_51N3jriDC5rlXGg8WXEFMQPOKLX5QwVNge0MJL5aheSRDqDd10IY1qylyZGR9WJabU1H2nG4FQCo5eE4CBZxCLrnB009VzMkubq'
 
@@ -29,8 +28,18 @@ const cancelURL = 'http://localhost:5173/paymentCancelled'
 
 const refCheckout = ref(null)
 
-async function toPayment() {
-  console.log("Submitting Test")
+onMounted(async () => {
   await refCheckout.value.redirectToCheckout()
-}
+})
 </script>
+
+<style>
+#loadingPurchase {
+  color: #157347;
+  position: absolute;
+  top: 50%;
+  left: 38%;
+  margin-top: -50px;
+  margin-left: -50px;
+}
+</style>
