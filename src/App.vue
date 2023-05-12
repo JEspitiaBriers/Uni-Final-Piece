@@ -90,7 +90,7 @@ function logout() {
 let myHeaders = new Headers();
 axios.get("http://localhost:4242/api/key")
   .then(response => {
-    myHeaders.append("apikey", response.data); //'wFtoAuudktssS0qgvj1oSNZ2Uy0qsUMI' //try add apiKey.value instead of the actual key
+    myHeaders.append("apikey", response.data);
   })
   .catch(error => {
     console.error(error);
