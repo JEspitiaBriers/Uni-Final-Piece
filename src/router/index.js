@@ -21,6 +21,18 @@ const router = createRouter({
       props: true
     },
     {
+      path: '/paymentSuccess',
+      name: 'PaymentSuccess',
+      component: () => import('../components/PaymentSuccess.vue'),
+      props: true
+    },
+    {
+      path: '/paymentCancelled',
+      name: 'PaymentCancelled',
+      component: () => import('../components/PaymentCancelled.vue'),
+      props: true
+    },
+    {
       path: '/offline',
       name: 'Offline',
       component: () => import('../views/OfflineView.vue')

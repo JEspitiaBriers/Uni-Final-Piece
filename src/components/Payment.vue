@@ -1,77 +1,43 @@
-<script setup>
-let variables = defineProps({
-  id: {
-    type: String,
-    default: ""
-  },
-  currencyRate: {
-    type: String,
-    default: "1"
-  },
-  currencyType: {
-    type: String,
-    default: "GBP"
-  }
-})
-</script >
-
 <template>
   <div class="onPage">
-    <h1> {{ id }} </h1>
-    <h1> {{ currencyRate }} </h1>
-    <h1> {{ currencyType }} </h1>
+    <h1>STRIPE INTEGRATION TEST</h1>
+    <StripeCheckout 
+    ref="refCheckout"
+    mode="payment"
+    :pk="publishStripeKey"
+    :lineItems="purchaseItems"
+    :successURL="sucessURL"
+    :cancelURL="cancelURL"
+    @loading="load => loading = load"/>
+    <button @click="toPayment">Checkout</button>
   </div>
 </template>
 
-<style>
-
-</style>
-<!-- < script setup >
-import { useStripe, useElements } from '@vue-stripe/vue-stripe';
-import { StripeCheckout } from '@vue-stripe/vue-stripe';
-// import Stripe from '@stripe/stripe-js'
-
-const stripe = useStripe();
-const elements = useElements();
-
-const handleSubmit = async () => {
-  const { error, paymentMethod } = await stripe.createPaymentMethod({
-    type: 'card',
-    card: elements.getElement('card'),
-  });
-
-  if (error) {
-    console.error(error.message);
-  }
-  else {
-    console.log(paymentMethod);
-    // Make API call to complete transaction
+<script>
+import { StripeCheckout } from '@vue-stripe/vue-stripe'
+export default {
+  components: {
+    StripeCheckout
+  },
+  data() {
+    this.publishStripeKey = 'pk_test_51N3jriDC5rlXGg8WXEFMQPOKLX5QwVNge0MJL5aheSRDqDd10IY1qylyZGR9WJabU1H2nG4FQCo5eE4CBZxCLrnB009VzMkubq'
+    return {
+      loading: false,
+      purchaseItems: [{
+        price: 'price_1N5vgrDC5rlXGg8WVo7SitvU',
+        quantity: 1
+      }],
+      successURL: 'http://localhost:5173/paymentSuccess',
+      cancelURL: 'http://localhost:5173/paymentCancelled'
+    }
+  },
+  methods: {
+    toPayment() {
+      console.log("Submitting Test")
+      this.$nextTick(() => {
+        this.$refs.refCheckout.redirectToCheckout()
+      })
+    }
   }
 }
 </script>
-
-<template>
-  <div class="onPage">
-  <h1>Checkout</h1>
-      <div ref="cardElement"></div>
-      <button @click="handleSubmit">Pay</button>
-    <StripeCheckout />
-  </div>
-</template>
-
-
-<template>
-  <StripeCheckout />
-  <StripeElementCard />
-</template>
-
-<script setup>
-import { StripeCheckout, StripeElementCard } from '@vue-stripe/vue-stripe';
-
-let props = defineProps(
-  
-)
-</script>
-
-    
- -->

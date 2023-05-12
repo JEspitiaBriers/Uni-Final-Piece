@@ -44,7 +44,7 @@ let variables = defineProps({
         <div class="card-footer d-flex align-items-end pt-2 px-2 pb-2 mt-auto">
           <button class="btn btn-success" style="margin: auto">
             <router-link style="text-decoration: none; color: white;"
-              :to="{ name: 'Payment', params: { id: item.id, currencyRate: currencyRate, currencyType: currencyType } }">
+              :to="{ name: 'Payment', params: { id: item.StripePriceId.substring(6), currencyRate: currencyRate, currencyType: currencyType } }">
               Buy Now
             </router-link>
           </button>

@@ -37,7 +37,9 @@ onMounted(async () => {
       Dimensions: doc.data().Dimensions,
       ImageMain: doc.data().ImageMain,
       Images: doc.data().Images,
-      Categories: doc.data().Categories
+      Categories: doc.data().Categories,
+      StripeID: doc.data().StripeID,
+      StripePriceId: doc.data().StripePriceId,
     }
     SaleItems.push(saleItem)
   })
