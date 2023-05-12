@@ -15,7 +15,7 @@ const router = createRouter({
       props: true
     },
     {
-      path: '/payment/:id/:currencyRate/:currencyType',
+      path: '/payment/:id/:quantity/:currencyRate/:currencyType',
       name: 'Payment',
       component: () => import('../components/Payment.vue'),
       props: true

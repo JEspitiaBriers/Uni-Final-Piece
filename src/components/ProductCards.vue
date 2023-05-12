@@ -41,7 +41,7 @@ let variables = defineProps({
         <h5>{{ (item.Price * currencyRate).toLocaleString(
           undefined, { style: "currency", currency: currencyType })
         }}</h5>
-        <div class="card-footer d-flex align-items-end pt-2 px-2 pb-2 mt-auto">
+        <!-- <div class="card-footer d-flex align-items-end pt-2 px-2 pb-2 mt-auto">
           <router-link style="text-decoration: none; color: white; margin:auto;"
             :to="{ name: 'Payment', params: { id: item.StripePriceId.substring(6), currencyRate: currencyRate, currencyType: currencyType } }">
             <button class="btn btn-success">
@@ -49,14 +49,7 @@ let variables = defineProps({
             </button>
           </router-link>
           <button class="btn btn-primary" @click="addToBasket(item.id)">Add to Basket</button>
-          <!--
-                        Call addToBasket()
-                        Call buyNow()
-                        Try to add these functions into a js file, 
-                          because they are needed by multiple pages
-                        See Fedaas getGeneIdInfo() in AWebD Project
-                       -->
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

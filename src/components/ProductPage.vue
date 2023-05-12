@@ -206,7 +206,7 @@ function quantity(value) {
             </div>
             <div class="col-md-7">
               <router-link style="text-decoration: none; color: white; margin-right: 5px;"
-                :to="{ name: 'Payment', params: { id: item.StripePriceId.substring(6), currencyRate: currencyRate, currencyType: currencyType } }">
+                :to="{ name: 'Payment', params: { id: item.StripePriceId.substring(6), quantity: quant, currencyRate: currencyRate, currencyType: currencyType } }">
                 <button class="btn btn-success">
                   Buy Now
                 </button>
