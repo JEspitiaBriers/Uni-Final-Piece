@@ -11,6 +11,8 @@ const perPageValue = ref(variables.itemsFound.length)
 </script>
 
 <template>
+  <!-- header of main dashboard, responsible for sorting
+     and showing number of results per page -->
   <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
     <strong class="d-block py-2">{{ itemsFound.length }} Items Found </strong>
     <div class="ms-auto">

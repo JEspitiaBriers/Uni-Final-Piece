@@ -26,6 +26,7 @@ let variables = defineProps({
 </script>
 
 <template>
+  <!-- iterates through items which match the users filters and displays them -->
   <div v-for="item in itemsDisplay" :key="item.id" class="col-lg-4 col-md-6 col-sm-6 d-flex">
     <div class="card w-100 my-2 shadow-2-strong productCards">
       <img :src="item.ImageMain" :alt="item.Alt" class="card-img-top" style="border-bottom: 2px solid #157347"/>
@@ -41,15 +42,6 @@ let variables = defineProps({
         <h5>{{ (item.Price * currencyRate).toLocaleString(
           undefined, { style: "currency", currency: currencyType })
         }}</h5>
-        <!-- <div class="card-footer d-flex align-items-end pt-2 px-2 pb-2 mt-auto">
-          <router-link style="text-decoration: none; color: white; margin:auto;"
-            :to="{ name: 'Payment', params: { id: item.StripePriceId.substring(6), currencyRate: currencyRate, currencyType: currencyType } }">
-            <button class="btn btn-success">
-              Buy Now
-            </button>
-          </router-link>
-          <button class="btn btn-primary" @click="addToBasket(item.id)">Add to Basket</button>
-        </div> -->
       </div>
     </div>
   </div>

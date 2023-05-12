@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router'
 import Filters from '../components/Filters.vue'
 import DashHead from '../components/DashHead.vue'
 import ProductCards from '../components/ProductCards.vue'
-// import DashFooter from '../components/DashFooter.vue'
 import Pagination from '../components/Pagination.vue'
 
 let router = useRouter()
@@ -29,6 +28,11 @@ let variables = defineProps({
   }
 })
 
+/**
+ * below is a series of functions which are emitted by
+ *  the child components. they alter the way the items are displayed
+ * by filtering and sorting
+ */
 const itemsDisplay = ref(variables.saleItems)
 const itemsFound = ref(variables.saleItems)
 function updateItemsFound(updatedItems) {
@@ -75,13 +79,10 @@ function buyNow(id) {
   console.log(id)
   router.push({ name: 'Payment', params: { id: id, currencyRate: variables.currencyRate, currencyType: variables.currencyType } })
 }
-
-function addToBasket(item) {
-
-}
 </script>
 
 <template >
+  <!-- if the user change currency, this alert appears while api call is awaiting -->
   <div class="alert alert-info" id="loadingCurrency" role="alert">
     <h4 class="alert-heading">Currency Changed</h4>
     <p>You have selected {{ currencyType }}, so displayed prices will be changed accordingly.</p>
@@ -89,6 +90,7 @@ function addToBasket(item) {
     <p class="mb-0">These changes are loading, please wait.</p>
   </div>
 
+  <!-- building dashboard from smaller components -->
   <div class="onPage" id="fade">
     <div style="padding: 20px 5px 0px 5px">
       <div class="row">
@@ -110,7 +112,6 @@ function addToBasket(item) {
       </div>
     </div>
   </div>
-  <!-- <DashFooter /> -->
 </template>
 
 <style>

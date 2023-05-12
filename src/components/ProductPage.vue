@@ -68,9 +68,6 @@ onMounted(async () => {
 
 let chosenColour = ref("Black")
 
-function buyNow() {
-  router.push("/payment")
-}
 
 let quant = ref(1)
 function quantity(value) {
@@ -102,6 +99,7 @@ async function addToBasket() {
         }
         else if (i == basket.length - 1 && !basket[i].includes(variables.id)) {
           addBasket()
+          break;
         }
       }
     }

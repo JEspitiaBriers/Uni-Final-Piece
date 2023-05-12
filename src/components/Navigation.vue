@@ -60,9 +60,9 @@ function changeRoute(e) {
 						</a>
 					</router-link>
 
-					<router-link to="/cart" class="d-none d-md-block mb-0">
+					<router-link to="/basket" class="d-none d-md-block mb-0">
 						<a v-if="user" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
-							<i class="bi bi-cart3"></i> Cart
+							<i class="bi bi-basket"></i> Basket
 						</a>
 					</router-link>
 					

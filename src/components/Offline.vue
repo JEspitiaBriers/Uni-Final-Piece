@@ -1,4 +1,5 @@
 <template>
+  <!-- This page displays if the user loses internet connnection -->
   <div class="onPage">
   <h1>Oh No! It appears you're offline...</h1>
   <p>
@@ -26,11 +27,6 @@ if (previousPage == "/" || previousPage == "Offline" || !previousPage) {
 else {
   previousPage = previousPage.substring(1).charAt(0).toUpperCase() + previousPage.slice(2)
 }
-
-// console.log(previousPage)
-console.log(router.currentRoute.value.name)
-// console.log(router.name)
-// console.log(navigator.onLine)
 
 </script>
   

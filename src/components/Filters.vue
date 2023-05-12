@@ -22,6 +22,12 @@ let variables = defineProps({
   }
 })
 
+
+/**
+ * Below is a series of filtering funciton, each called by a part
+ *  of this filters component to reduce the item results
+ * according to the users desires
+ */
 const itemsToFilter = ref(variables.saleItems)
 
 const searchTerm = ref("")
@@ -98,6 +104,8 @@ function applyAllFilters() {
   }
 }
 
+
+// applys final filters and reducing the datas set to display
 function filterResults() {
   let newResults = []
   let newFilteredResults = []
@@ -135,6 +143,7 @@ function filterResults() {
   itemsToFilter.value = newFilteredResults
 }
 
+// clears filters
 function clearAllFilters() {
   searchTerm.value = ""
   let categoryArray = document.getElementsByClassName('categoryCheck')
@@ -168,6 +177,7 @@ function clearAllFilters() {
       <button type="button" class="btn btn-white w-50 border border-secondary"
         @click="clearAllFilters(), $emit('updateItemsFound', itemsToFilter), $emit('showPerPage')">Clear
         All Filters</button>
+      <!-- categories filter -->
       <div class="accordion-item">
         <h2 class="accordion-header" id="categoriesButton">
           <button class="accordion-button text-dark bg-light" type="button" data-bs-toggle="collapse"
@@ -218,15 +228,16 @@ function clearAllFilters() {
           </div>
         </div>
       </div>
+      <!-- size filter -->
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingThree">
           <button class="accordion-button text-dark bg-light" type="button" data-bs-toggle="collapse"
-            data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false"
-            aria-controls="panelsStayOpen-collapseFour">
+            data-bs-target="#sizeCollapse" aria-expanded="false"
+            aria-controls="sizeCollapse">
             Size
           </button>
         </h2>
-        <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse show" aria-labelledby="headingThree">
+        <div id="sizeCollapse" class="accordion-collapse collapse show" aria-labelledby="headingThree">
           <div class="accordion-body">
             Area
             <div class="form-check">
@@ -269,6 +280,7 @@ function clearAllFilters() {
           </div>
         </div>
       </div>
+      <!-- price filter -->
       <div class="accordion-item">
         <h2 class="accordion-header" id="priceButton">
           <button class="accordion-button text-dark bg-light" type="button" data-bs-toggle="collapse"

@@ -1,6 +1,21 @@
 # CreativeProject
 
-This template should help get you started developing with Vue 3 in Vite.
+Manchester Metropolitan University
+Software Engineering year 3
+Final Project - 19021656 - Jamie Espitia Briers
+
+## To use there are 2 methods to use this product:
+
+method 1:
+open 2 terminals
+in the first terminal execute: node server.js
+in the second terminal execute: npm run dev
+
+method 2:
+open 2 terminals
+in the first terminal execute: node server.js
+in the second terminal execute: npm run build
+visit the URL printed in the temrinal
 
 ## Recommended IDE Setup
 

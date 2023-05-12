@@ -47,6 +47,7 @@ function getAge(dateString) {
   return age;
 }
 
+// performs check to see if inputs are valid
 async function register() {
   try {
     if (getAge(DoB.value) > 18) {
@@ -90,6 +91,7 @@ function home() {
 </script>
 
 <template>
+  <!-- the form and inputs -->
   <div class="onPage" id="registerPage">
     <h2 style="text-align: center">Register</h2>
 

@@ -1,4 +1,5 @@
 <template>
+  <!-- This page redirects to stripes checkout page -->
   <div class="onPage">
     <h1>Preparing Purchase Page</h1>
     <StripeCheckout 
@@ -6,8 +7,7 @@
     mode="payment"
     :pk="publishStripeKey"
     :lineItems="purchaseItems"
-    :successURL="sucessURL"
-    :cancelURL="cancelURL"/>
+    :successURL="sucessURL"/>
   </div>
 </template>
 
@@ -33,7 +33,6 @@ const purchaseItems = [{
 }]
 
 const successURL = 'http://localhost:5173/paymentSuccess'
-const cancelURL = 'http://localhost:5173/paymentCancelled'
 
 const refCheckout = ref(null)
 

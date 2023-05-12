@@ -6,6 +6,7 @@ let searchTerm = ref("")
 </script>
 
 <template>
+  <!-- search bar as part of filtering process -->
   <ul class="navbar-nav">
     <input autocomplete="off" type="search" 
       v-model="searchTerm"

@@ -12,6 +12,7 @@ import axios from "axios";
 let loaded = false
 const router = useRouter()
 
+//redirects if user loses connnection
 let previousPage = router.options.history.state.back
 window.addEventListener("offline", (e) => {
   router.push("/offline")
@@ -25,6 +26,8 @@ window.addEventListener("online", (e) => {
   }
 })
 
+
+//requests all saleitems from firestore
 const saleItems = ref([])
 onMounted(async () => {
   const querySnapshot = await getDocs(collection(firebaseFireStore, "SaleItems"))
@@ -49,6 +52,7 @@ onMounted(async () => {
   loaded = true
 })
 
+//requests all user data from firestore
 const userItems = ref([])
 onMounted(async () => {
   const querySnapshot = await getDocs(collection(firebaseFireStore, "Users"))
@@ -66,6 +70,7 @@ onMounted(async () => {
   userItems.value = fbUsers
 })
 
+//reuqests logged in user data
 const user = ref(null)
 onAuthStateChanged(firebaseAuthentication, (currentUser) => {
   if (currentUser) {
@@ -75,6 +80,7 @@ onAuthStateChanged(firebaseAuthentication, (currentUser) => {
   }
 })
 
+//logs the user out
 const errorLogout = ref(null)
 function logout() {
   signOut(firebaseAuthentication).then(
@@ -88,6 +94,10 @@ function logout() {
   )
 }
 
+/**
+ * Below is a collection of variables and functions to 
+ * request live exchange rates to update user prices
+ */
 let myHeaders = new Headers();
 axios.get("http://localhost:4242/api/key")
   .then(response => {

@@ -7,6 +7,7 @@ let variables = defineProps({
 </script>
 
 <template>
+  <!-- The page button and functionality of the dashboard -->
   <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3">
     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
       <input class="btn-check pageBtn" type="radio" name="pageBtn" id="pageBtn1" checked

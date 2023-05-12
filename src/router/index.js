@@ -48,9 +48,14 @@ const router = createRouter({
       component: () => import('../components/Register.vue')
     },
     {
-      path: '/manage',
-      name: 'ManageAccount',
-      component: () => import('../views/ManageAccountView.vue')
+      path: '/basket',
+      name: 'Basket',
+      component: () => import('../components/Basket.vue')
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'Dash',
+      component: () => import('../components/Dash.vue')
     }
   ]
 });
