@@ -1,8 +1,6 @@
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
 import { defineRule } from 'vee-validate';
-import { BootstrapVueIcons } from 'bootstrap-vue';
-import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 
@@ -25,7 +23,6 @@ defineRule('required', (value) => {
 
 const app = createApp(App);
 
-app.use(BootstrapVueIcons);
 app.use(createPinia());
 app.use(router);
 

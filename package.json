@@ -19,7 +19,7 @@
     "apexcharts": "^3.37.1",
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
-    "bootstrap-icons": "^1.10.4",
+    "bootstrap-icons": "^1.10.5",
     "cors": "^2.8.5",
     "datatables.net-dt": "^1.13.4",
     "datatables.net-select-bs5": "^1.6.2",
