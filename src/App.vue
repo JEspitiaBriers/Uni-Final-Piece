@@ -5,6 +5,8 @@ import { collection, getDocs } from 'firebase/firestore';
 
 import { useRouter } from 'vue-router'
 import Navigation from '@/components/Navigation.vue'
+import AppFooter from '@/components/AppFooter.vue'
+
 import axios from "axios";
 
 let loaded = false
@@ -128,9 +130,9 @@ async function changeCurrency(selectedCurrency) {
 </script>
 
 <template>
-  <Navigation :user="user" :userItems="userItems" @change-currency="changeCurrency" @logout="logout" />
+  <Navigation :user="user" :userItems="userItems" @change-currency="changeCurrency" @logout="logout" :key="$route.fullPath"/>
   <div v-if="loaded">
-    <RouterView :user="user" :userItems="userItems" :saleItems="saleItems" :currencyType="currencyType" :currencyRate="currencyRate" /> 
+    <RouterView :user="user" :userItems="userItems" :saleItems="saleItems" :currencyType="currencyType" :currencyRate="currencyRate" :key="$route.fullPath"/> 
   </div>
   <footer class="text-center text-lg-start text-muted mt-3">
     <AppFooter />
@@ -139,7 +141,7 @@ async function changeCurrency(selectedCurrency) {
 
 <style>
 .onPage {
-  padding-top: 80px;
+  padding-top: 90px;
 }
 
 .dataTablePage {
@@ -169,5 +171,14 @@ async function changeCurrency(selectedCurrency) {
 .productCards {
   border: 2px solid #157347 ! important;
 
+}
+
+footer {
+  background-color: #157347;
+}
+
+a {
+  color: #157347;
+  text-decoration: none;
 }
 </style>

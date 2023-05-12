@@ -2,9 +2,13 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { firebaseFireStore } from '@/firebase/database'
-import { collection, getDoc, getDocs, doc, where, limit } from 'firebase/firestore';
+import { collection, getDoc, getDocs, doc, updateDoc, where, limit } from 'firebase/firestore';
 
 let variables = defineProps({
+  user: {
+    type: Object,
+    default: () => {}
+  },
   id: {
     type: String
   },
@@ -18,9 +22,7 @@ let variables = defineProps({
 let route = useRoute()
 let router = useRouter()
 
-console.log(variables.id)
-
-const itemRef = doc(firebaseFireStore, "SaleItems", variables.id);
+const itemRef = doc(firebaseFireStore, "SaleItems", variables.id)
 let item = ref(null);
 let recArray = ref([])
 
@@ -41,26 +43,14 @@ recArray.value = recItems
 */
 
 onMounted(async () => {
-  console.log(Boolean("false"))
-  console.log(Boolean(false))
-  console.log(false)
-  console.log(Boolean(true))
-  console.log(true)
   try {
     const snapshot = await getDoc(itemRef);
     if (snapshot.exists()) {
       item.value = snapshot.data()
-      console.log("-- success --")
-
-    } else {
-      console.log("Document does not exist")
     }
   } catch (error) {
     console.log(error)
   }
-
-  console.log(item.value)
-  console.log(item.value.Categories)
   const recQuery = await getDocs(collection(firebaseFireStore, "SaleItems"), where('Categories', '==', "'" + item.value.Categories + "'"), limit(3))
   let recItems = []
   recQuery.forEach((doc) => {
@@ -74,33 +64,9 @@ onMounted(async () => {
     recItems.push(recommendation)
   })
   recArray.value = recItems
-  console.log('recArray.value')
-  console.log(recArray.value)
 })
 
 let chosenColour = ref("Black")
-
-let subTab = ref("Description")
-let message = ref('')
-function changeSubTab(e) {
-  subTab.value = e
-  console.log(subTab.value)
-
-  if (subTab.value == "Description") {
-    // message.value = item.value.Description + item.value.Dimensions
-    document.getElementById('subNavPage').innerHTML = "<p>Item Description</p><p>" + item.value.Description + "</p>"
-  }
-  else if (subTab.value == "Delivery") {
-    message.value = "Delivery available by "
-  }
-  else {
-    message.value = "This is reviews"
-  }
-}
-
-function addToBasket() {
-  console.log("added to basket: " + item.value.Title)
-}
 
 function buyNow() {
   router.push("/payment")
@@ -116,13 +82,44 @@ function quantity(value) {
   }
   else {
     quant.value += Number(value)
-    console.log(quant.value)
   }
 }
+
+const addOrIn = ref('')
+async function addToBasket() {
+  if (variables.user) {
+    const userRef = await doc(firebaseFireStore, "Users", variables.user.uid)
+    const userDoc = await getDoc(userRef)
+    const basket = userDoc.data().Basket
+    if (basket.length == 0) {
+      addBasket()
+    }
+    else {
+      for (let i = 0; i <= basket.length; i++) {
+        if (basket[i].includes(variables.id)) {
+          addOrIn.value = "in"
+          break;
+        }
+        else if (i == basket.length - 1 && !basket[i].includes(variables.id)) {
+          addBasket()
+        }
+      }
+    }
+    function addBasket() {
+      basket.push(variables.id + " /::" + String(quant.value))
+      updateDoc(userRef, "Basket", basket)
+      addOrIn.value = "added"
+    }
+  }
+  else {
+    addOrIn.value = "login"
+  }
+}
+
 </script>
 
 <template >
-  <div class="onPage" style="margin-top: 10px">
+  <div class="onPage" style="margin-top: 20px">
     <!-- <router-link :to="router.go(-1)">Go Back</router-link> -->
     <div v-if="item">
       <div class="row gx-5">
@@ -130,12 +127,6 @@ function quantity(value) {
         <div class="col-lg-4">
           <div class="mb-3 d-flex justify-content-center" id="productImageBox">
             <img style="max-width: 100%; max-height: 100vh; margin: auto;" id="productImage" :src="item.ImageMain" />
-          </div>
-
-          <div class="d-flex justify-content-center mb-3">
-            <div v-for="image in item.images" :key="id" class="productCards">
-              <img width="60" height="60" :src="item.Images" class="lowerImage" />
-            </div>
           </div>
         </div>
 
@@ -201,7 +192,7 @@ function quantity(value) {
               </div>
             </div>
 
-            <div class="col-md-5 col-6 mb-3">
+            <div class="col-md-4 col-6 mb-3">
               <label class="mb-2 d-block">Sub-total</label>
               <!-- add stock count to db -->
               <div class="input-group mb-3 border-success" style="width: 120px;">
@@ -217,6 +208,9 @@ function quantity(value) {
                 </button>
               </router-link>
               <a class="btn btn-primary" style="margin-right:5px" @click="addToBasket()"> Add to Basket </a>
+              <p v-if="addOrIn == 'in'">Item already in basket</p>
+              <p v-else-if="addOrIn == 'added'">Item added to basket!</p>
+              <p v-else-if="addOrIn == 'login'">Login to add items to basket</p>
             </div>
             <p>Please note, all successful purchases will be charge as £GBP at final checkout</p>
           </div>
@@ -239,26 +233,6 @@ function quantity(value) {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="productBottom">
-        <div class="container">
-          <div class="row gx-4">
-            <div class="col-lg-4 mb-8"></div>
-            <div class="col-lg-8 mb-4">
-              <div class="border rounded-2 px-3 py-2 bg-white">
-
-                <div class="btn-group" role="group">
-                  <button type="button" class="btn btn-primary" @click="changeSubTab('Description')">Description</button>
-                  <button type="button" class="btn btn-primary" @click="changeSubTab('Reviews')">Reviews</button>
-                  <button type="button" class="btn btn-primary" @click="changeSubTab('Delivery')">Delivery</button>
-                </div>
-                <div id="subNavPage"></div>
-              </div>
-
             </div>
           </div>
         </div>
@@ -313,6 +287,7 @@ function quantity(value) {
   #productRecs {
     border: solid 1px lightgrey;
     border-radius: 15px;
-    padding-left: 5px;
+    padding-left: 35px;
   }
-}</style>
+}
+</style>

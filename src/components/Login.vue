@@ -6,11 +6,14 @@ import { validateEmail, checkPasswordLength } from '../assets/utils.js'
 import { firebaseAuthentication, signInWithEmailAndPassword } from '@/firebase/database'
 import { useRouter } from 'vue-router'
 
-let userProp = defineProps({
+let variables = defineProps({
   user: {
-    type: Object
+    type: Object,
+    default: () => { }
   }
 })
+
+// console.log(variables.user)
 
 const email = ref('')
 const password = ref('')
@@ -51,10 +54,10 @@ function resetPassword() {
 <template>
   <div class="onPage" id="loginPage">
 
-    <template v-if="user">{{ user }}</template>
-        <template v-else>ELSE TEST</template>
+    <template v-if="user"><h2 style="text-align: center">You're already logged in as {{ user }}</h2>
+    <button to="/">To the Dashboard</button></template>
 
-    <template v-if="!user">
+    <template v-else-if="!user">
       <h2 style="text-align: center">Login</h2>
 
       <label>Email</label>
@@ -89,5 +92,6 @@ function resetPassword() {
   margin: auto;
   width: 30%;
   display: block;
+  margin-bottom: 150px;
 }
 </style>

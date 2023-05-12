@@ -43,32 +43,32 @@ function changeRoute(e) {
 
 					<router-link to="/login" class="d-none d-md-block mb-0">
 						<a v-if="!user" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
-							Log in
+							<i class="bi bi-door-open"></i> Log in
 						</a>
 					</router-link>
 
 					<router-link to="/register" class="d-none d-md-block mb-0">
 						<a v-if="!user" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
-							Register
+							<i class="bi bi-clipboard-plus"></i> Register
 						</a>
 					</router-link>
 					
 
 					<router-link to="/" class="d-none d-md-block mb-0">
 						<a class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
-								Dashboard
+							<i class="bi bi-house-door"></i> Dashboard
 						</a>
 					</router-link>
 
 					<router-link to="/cart" class="d-none d-md-block mb-0">
 						<a v-if="user" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
-							Cart
+							<i class="bi bi-cart3"></i> Cart
 						</a>
 					</router-link>
 					
 					<a v-if="user">
 						<select class="form-select d-inline-block w-auto border pt-1" @change="changeRoute($event.target.value)">
-							<option selected :value="currentPage">Hello, {{ user.displayName }}</option>
+							<option selected :value="currentPage"> Hello, {{ user.displayName }}</option>
 							<option value="manage">Manage Account</option>
 							<option @click="$emit('logout')">Logout</option>
 						</select>
@@ -87,4 +87,8 @@ function changeRoute(e) {
 	vertical-align: middle;
 }
 /* Navbar End */
+
+.bi {
+	padding-right: 5px;
+}
 </style>

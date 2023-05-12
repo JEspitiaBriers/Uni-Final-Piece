@@ -48,36 +48,39 @@ function getAge(dateString) {
 }
 
 async function register() {
-  if (getAge(DoB.value) > 18) {
-    if (password.value == passConfirm.value) {
-      const { user } = await createUserWithEmailAndPassword(firebaseAuthentication, email.value, password.value)
-      setDoc(doc(firebaseFireStore, 'Users', user.uid), {
-        Firstname: firstname.value,
-        Surname: surname.value,
-        Email: email.value,
-        DOB: DoB.value,
-        Created: serverTimestamp()
-      })
-        .then(() =>
-          updateProfile(firebaseAuthentication.currentUser, {
-            firstName: firstname.value,
-            surname: surname.value,
-            DOB: DoB.value,
-            displayName: firstname.value
-          }).then(() => {
-            router.push('/')
-          })
-        )
-        .catch((error) => {
-          registerMessage.value = error.message.substring(error.message.indexOf("/") + 1, error.message.length - 2)
+  try {
+    if (getAge(DoB.value) > 18) {
+      if (password.value == passConfirm.value) {
+        const { user } = await createUserWithEmailAndPassword(firebaseAuthentication, email.value, password.value)
+        setDoc(doc(firebaseFireStore, 'Users', user.uid), {
+          Firstname: firstname.value,
+          Surname: surname.value,
+          Email: email.value,
+          DOB: DoB.value,
+          Basket: [],
+          Created: serverTimestamp()
         })
+          .then(() =>
+            updateProfile(firebaseAuthentication.currentUser, {
+              firstName: firstname.value,
+              surname: surname.value,
+              DOB: DoB.value,
+              displayName: firstname.value
+            }).then(() => {
+              router.push('/')
+            })
+          )
+      }
+      else {
+        throw new Error ("/Passwords do not match..")
+      }
     }
     else {
-      registerMessage.value = "Passwords do not match"
+      throw new Error("/Must be older than 18 years..")
     }
   }
-  else {
-    registerMessage.value = "Age must be 18"
+  catch (error) {
+    registerMessage.value = error.message.substring(error.message.indexOf("/") + 1, error.message.length - 2)
   }
 }
 

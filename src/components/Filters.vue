@@ -4,13 +4,6 @@ import { useRouter } from 'vue-router'
 import Search from '../components/Search.vue'
 
 let variables = defineProps({
-  // user: {
-  //   type: Object
-  // },
-  // userItems: {
-  //   type: Object,
-  //   default: () => { }
-  // },
   itemsFound: {
     type: Object,
     default: () => { }
@@ -160,19 +153,19 @@ function clearAllFilters() {
 </script>
 
 <template>
-  <button class="btn btn-outline-secondary w-100 d-lg-none show-filters" type="button" data-bs-toggle="collapse"
+  <button class="btn btn-outline-secondary w-100 d-lg-none show-filters filtersBorder" type="button" data-bs-toggle="collapse"
     data-bs-target="#saleFilters" aria-controls="saleFilters" aria-expanded="false" aria-label="Toggle navigation">
     <span>Show filters</span>
   </button>
 
-  <Search @change-search="changeSearch" />
+  <Search class="filtersBorder" @change-search="changeSearch" />
 
   <div class="collapse card d-lg-block mb-5" id="saleFilters">
-    <div class="accordion" id="saleFiltersSide">
-      <button type="button" class="btn btn-white w-100 border border-secondary"
+    <div class="accordion filtersBorder" id="saleFiltersSide">
+      <button type="button" class="btn btn-white w-50 border border-secondary"
         @click="applyAllFilters(), $emit('updateItemsFound', itemsToFilter), $emit('showPerPage')">Apply
-        and Search</button>
-      <button type="button" class="btn btn-white w-100 border border-secondary"
+        & Search</button>
+      <button type="button" class="btn btn-white w-50 border border-secondary"
         @click="clearAllFilters(), $emit('updateItemsFound', itemsToFilter), $emit('showPerPage')">Clear
         All Filters</button>
       <div class="accordion-item">
@@ -315,4 +308,9 @@ function clearAllFilters() {
   </div>
 </template>
 
-<style></style>
+<style>
+.filtersBorder {
+  border: 2px solid #157347;
+  border-radius: 8px;
+}
+</style>

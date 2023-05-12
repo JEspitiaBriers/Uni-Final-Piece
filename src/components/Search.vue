@@ -10,7 +10,7 @@ let searchTerm = ref("")
     <input autocomplete="off" type="search" 
       v-model="searchTerm"
       @change="$emit('changeSearch', $event.target.value)"
-      class="search col-lg-9" placeholder='Search'/>
+      class="search" placeholder='Search'/>
   </ul> 
 </template>
 

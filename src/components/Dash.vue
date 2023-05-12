@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import Filters from '../components/Filters.vue'
 import DashHead from '../components/DashHead.vue'
 import ProductCards from '../components/ProductCards.vue'
-import DashFooter from '../components/DashFooter.vue'
+// import DashFooter from '../components/DashFooter.vue'
 import Pagination from '../components/Pagination.vue'
 
 let router = useRouter()
@@ -110,7 +110,7 @@ function addToBasket(item) {
       </div>
     </div>
   </div>
-  <DashFooter />
+  <!-- <DashFooter /> -->
 </template>
 
 <style>
@@ -125,14 +125,5 @@ function addToBasket(item) {
   margin-top: 10%;
   position: fixed;
   z-index: 99;
-}
-
-footer {
-  background-color: #157347;
-}
-
-a {
-  color: #157347;
-  text-decoration: none;
 }
 </style>
