@@ -41,29 +41,30 @@ function changeRoute(e) {
 						</select>
 					</a>
 
-					<a v-if="!user" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
-						<router-link to="/login" class="d-none d-md-block mb-0">
+					<router-link to="/login" class="d-none d-md-block mb-0">
+						<a v-if="!user" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
 							Log in
-						</router-link>
-					</a>
+						</a>
+					</router-link>
 
-					<a v-if="!user" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
-						<router-link to="/register" class="d-none d-md-block mb-0">
+					<router-link to="/register" class="d-none d-md-block mb-0">
+						<a v-if="!user" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
 							Register
-						</router-link>
-					</a>
+						</a>
+					</router-link>
+					
 
-					<a class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
-						<router-link to="/" class="d-none d-md-block mb-0">
-							Dashboard
-						</router-link>
-					</a>
+					<router-link to="/" class="d-none d-md-block mb-0">
+						<a class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
+								Dashboard
+						</a>
+					</router-link>
 
-					<a v-if="user" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
-						<router-link to="/cart" class="d-none d-md-block mb-0">
+					<router-link to="/cart" class="d-none d-md-block mb-0">
+						<a v-if="user" class="me-1 border rounded py-1 px-3 nav-link d-flex align-items-center">
 							Cart
-						</router-link>
-					</a>
+						</a>
+					</router-link>
 					
 					<a v-if="user">
 						<select class="form-select d-inline-block w-auto border pt-1" @change="changeRoute($event.target.value)">

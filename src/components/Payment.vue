@@ -7,8 +7,7 @@
     :pk="publishStripeKey"
     :lineItems="purchaseItems"
     :successURL="sucessURL"
-    :cancelURL="cancelURL"
-    @loading="load => loading = load"/>
+    :cancelURL="cancelURL"/>
     <button @click="toPayment">Checkout</button>
   </div>
 </template>

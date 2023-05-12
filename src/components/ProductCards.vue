@@ -42,12 +42,12 @@ let variables = defineProps({
           undefined, { style: "currency", currency: currencyType })
         }}</h5>
         <div class="card-footer d-flex align-items-end pt-2 px-2 pb-2 mt-auto">
-          <button class="btn btn-success" style="margin: auto">
-            <router-link style="text-decoration: none; color: white;"
-              :to="{ name: 'Payment', params: { id: item.StripePriceId.substring(6), currencyRate: currencyRate, currencyType: currencyType } }">
+          <router-link style="text-decoration: none; color: white; margin:auto;"
+            :to="{ name: 'Payment', params: { id: item.StripePriceId.substring(6), currencyRate: currencyRate, currencyType: currencyType } }">
+            <button class="btn btn-success">
               Buy Now
-            </router-link>
-          </button>
+            </button>
+          </router-link>
           <button class="btn btn-primary" @click="addToBasket(item.id)">Add to Basket</button>
           <!--
                         Call addToBasket()
