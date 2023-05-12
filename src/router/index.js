@@ -36,19 +36,9 @@ const router = createRouter({
       component: () => import('../components/Register.vue')
     },
     {
-      path: '/analysis',
-      name: 'Analysis',
-      component: () => import('../views/AnalysisView.vue')
-    },
-    {
       path: '/manage',
       name: 'ManageAccount',
       component: () => import('../views/ManageAccountView.vue')
-    },
-    {
-      path: '/addProduct',
-      name: 'AddProduct',
-      component: () => import('../components/AddProduct.vue')
     }
   ]
 });

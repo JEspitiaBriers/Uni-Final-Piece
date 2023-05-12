@@ -5,6 +5,7 @@ import { collection, getDocs } from 'firebase/firestore';
 
 import { useRouter } from 'vue-router'
 import Navigation from '@/components/Navigation.vue'
+import axios from "axios";
 
 let loaded = false
 const router = useRouter()
@@ -87,7 +88,13 @@ function logout() {
 }
 
 let myHeaders = new Headers();
-myHeaders.append("apikey", "wFtoAuudktssS0qgvj1oSNZ2Uy0qsUMI"); //encrypt the key
+axios.get("http://localhost:4242/api/key")
+  .then(response => {
+    myHeaders.append("apikey", response.data); //'wFtoAuudktssS0qgvj1oSNZ2Uy0qsUMI' //try add apiKey.value instead of the actual key
+  })
+  .catch(error => {
+    console.error(error);
+  });
 
 let requestOptions = {
   method: 'GET',
@@ -103,7 +110,7 @@ async function changeCurrency(selectedCurrency) {
 
   // if (currencyType != 'GBP' && typeof currencyType !== 'undefined') {
   //   let currencyData;
-  //   console.log("Called and is " + currencyType)
+  //   console.log("Called and is " + currencyType.value)
 
   //   document.getElementById("loadingCurrency").style.display = "block";
   //   document.getElementById("fade").style.opacity = "25%";
@@ -120,7 +127,6 @@ async function changeCurrency(selectedCurrency) {
   // else {
   //   return "1"
   // }
-  // console.log(currencyType.value)
 }
 </script>
 
