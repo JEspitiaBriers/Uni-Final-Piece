@@ -23,19 +23,13 @@ const variables = defineProps({
   quantity: {
     type: String
   },
-  currencyRate: {
-    type: String
-  },
-  currencyType: {
-    type: String
-  }
 })
 
 const publishStripeKey = 'pk_test_51N3jriDC5rlXGg8WXEFMQPOKLX5QwVNge0MJL5aheSRDqDd10IY1qylyZGR9WJabU1H2nG4FQCo5eE4CBZxCLrnB009VzMkubq'
 
-const purchaseItems= [{
+const purchaseItems = [{
   price: 'price_' + variables.id,
-  quantity: variables.quantity
+  quantity: Number(variables.quantity),
 }]
 
 const successURL = 'http://localhost:5173/paymentSuccess'

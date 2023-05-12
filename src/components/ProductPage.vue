@@ -15,7 +15,6 @@ let variables = defineProps({
     type: String
   }
 })
-let discount = 0.1
 let route = useRoute()
 let router = useRouter()
 
@@ -107,10 +106,13 @@ function buyNow() {
   router.push("/payment")
 }
 
-let quant = ref(0)
+let quant = ref(1)
 function quantity(value) {
-  if (quant.value == 0 && value == '-1') {
-    quant.value = 0
+  if (quant.value == 1 && value == '-1') {
+    quant.value = 1
+  }
+  else if (quant.value == 10 && value == '1') {
+    quant.value = 10
   }
   else {
     quant.value += Number(value)
@@ -142,8 +144,7 @@ function quantity(value) {
           <h3> {{ item.Title }} </h3> <br>
 
           <div class="mb-3">
-            <span class="h5">{{ ((item.Price * currencyRate) - (item.Price * currencyRate *
-              discount)).toLocaleString(undefined, { style: "currency", currency: currencyType }) }}</span>
+            <span class="h5">{{ ((item.Price * currencyRate)).toLocaleString(undefined, { style: "currency", currency: currencyType }) }}</span>
             <span class="text-muted">/unit</span>
           </div>
 
@@ -191,7 +192,7 @@ function quantity(value) {
               <!-- add stock count to db -->
               <div class="input-group mb-3 border-success" style="width: 120px;">
                 <button class="btn btn-white quantity border-success" type="button" @click="quantity('-1')"><b>-</b></button>
-                <input type="text" class="form-control text-center border border-success" :value="quant" />
+                <input type="text" class="form-control text-center border border-success" :value="quant" disabled/>
                 <button class="btn btn-white quantity border-success" type="button" @click="quantity('1')"><b>+</b></button>
               </div>
             </div>
@@ -200,19 +201,19 @@ function quantity(value) {
               <label class="mb-2 d-block">Sub-total</label>
               <!-- add stock count to db -->
               <div class="input-group mb-3 border-success" style="width: 120px;">
-                <input type="text" class="form-control text-center border-success" :value="((item.Price * currencyRate * quant) - (item.Price * currencyRate *
-                  (discount * quant))).toLocaleString(undefined, { style: 'currency', currency: currencyType })" />
+                <input type="text" class="form-control text-center border-success" :value="((item.Price * currencyRate * quant)).toLocaleString(undefined, { style: 'currency', currency: currencyType })" />
               </div>
             </div>
             <div class="col-md-7">
               <router-link style="text-decoration: none; color: white; margin-right: 5px;"
-                :to="{ name: 'Payment', params: { id: item.StripePriceId.substring(6), quantity: quant, currencyRate: currencyRate, currencyType: currencyType } }">
+                :to="{ name: 'Payment', params: { id: item.StripePriceId.substring(6), quantity: quant} }">
                 <button class="btn btn-success">
                   Buy Now
                 </button>
               </router-link>
               <a class="btn btn-primary" style="margin-right:5px" @click="addToBasket()"> Add to Basket </a>
             </div>
+            <p>Please note, all successful purchases will be charge as £GBP at final checkout</p>
           </div>
         </div>
 
