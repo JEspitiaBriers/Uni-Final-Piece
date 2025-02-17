@@ -4,19 +4,17 @@ Manchester Metropolitan University
 Software Engineering year 3
 Final Project - 19021656 - Jamie Espitia Briers
 
-## To use there are 2 methods to use this product:
+## To run the project
 
-common steps:
-open 2 terminals
-in the first terminal execute: npm install
-then execute: node server.js
+npm install
+node server.js
 
-method 1:
-in the second terminal execute: npm run dev
+_for development_
+npm run dev
 
-method 2:
-in the second terminal execute: npm run build
-visit the URL printed in the temrinal
+_for deployment_
+npm run build
+visit the URL
 
 ## Recommended IDE Setup
 
@@ -42,32 +40,4 @@ npm run dev
 
 ```sh
 npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
-
-```sh
-npm run test:e2e:dev
-```
-
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-npm run build
-npm run test:e2e
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```
