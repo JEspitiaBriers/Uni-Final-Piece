@@ -25,7 +25,6 @@ let variables = defineProps({
     type: String
   }
 });
-console.log('DASH SALE ITEMS', variables.saleItems);
 const parentComponent = 'Dash';
 
 /**
@@ -105,7 +104,6 @@ function addedBasketAlert() {
 
 let openInBasketAlert = true;
 function inBasketAlert() {
-  console.log('in basket');
   if (openInBasketAlert) {
     document.getElementById('inBasket').style.display = 'block';
     document.getElementById('fade').style.opacity = '25%';
@@ -116,7 +114,6 @@ function inBasketAlert() {
     openInBasketAlert = true;
   }
 }
-console.log(itemsDisplay.value);
 </script>
 
 <template>

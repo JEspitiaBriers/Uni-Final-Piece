@@ -26,7 +26,6 @@ const basketParam = route.query.basket ? JSON.parse(decodeURIComponent(route.que
 //prepares items for purchase into Stripe format
 const purchaseItems = computed(() => {
   if (basketParam) {
-    console.log('BASKET TEST BASKET PARAM');
     // If coming from the basket, process multiple items
     return basketParam
       .map((entry) => {
@@ -48,11 +47,8 @@ const purchaseItems = computed(() => {
 const refCheckout = ref(null);
 
 onMounted(async () => {
-  console.log('Current route status:', route.query.status);
-
   //redirect to checkout
   if (!route.query.status) {
-    console.log('Starting Stripe checkout process...');
     if (refCheckout.value) {
       await refCheckout.value.redirectToCheckout();
     } else {
@@ -66,10 +62,8 @@ onMounted(async () => {
 //show pop-ups
 function postPurchaseAttempt(status) {
   if (status === 'cancel') {
-    console.log('calling cancel alert');
     cancelAlert();
   } else if (status === 'success') {
-    console.log('calling success alert');
     successAlert();
   }
 }

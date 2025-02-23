@@ -36,15 +36,15 @@ const user = ref(null);
 const saleItems = ref([]);
 const userItems = ref([]);
 onMounted(async () => {
-  // const auth = await firebaseAuthentication;
+  const auth = await firebaseAuthentication;
 
-  // onAuthStateChanged(auth, (currentUser) => {
-  //   if (currentUser) {
-  //     user.value = currentUser;
-  //   } else {
-  //     user.value = null;
-  //   }
-  // });
+  onAuthStateChanged(auth, (currentUser) => {
+    if (currentUser) {
+      user.value = currentUser;
+    } else {
+      user.value = null;
+    }
+  });
   //saleItems
   try {
     const querySnapshot = await getDocs(collection(firebaseFireStore, 'SaleItems'));

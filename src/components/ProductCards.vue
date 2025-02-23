@@ -126,9 +126,6 @@ watch(
   },
   { deep: true }
 );
-
-console.log('PRODUCT CARDS itemsDisplay', variables.itemsDisplay);
-console.log('PRODUCT CARDS displayList', displayList.value);
 </script>
 
 <template>

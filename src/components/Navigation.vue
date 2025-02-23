@@ -27,7 +27,6 @@ function changeRoute(e) {
 //User tries to add item to basket without logging in
 let openLoginBasketAlert1 = true;
 function loginBasketAlert1() {
-  console.log('Nav loginBasket1 this');
   if (openLoginBasketAlert1) {
     document.getElementById('loginBasket1').style.display = 'block';
     document.getElementById('fade1').style.opacity = '25%';

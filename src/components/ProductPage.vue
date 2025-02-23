@@ -34,7 +34,7 @@ onMounted(async () => {
       item.value = snapshot.data();
     }
   } catch (error) {
-    console.log(error);
+    console.error('Error collecting items (Product Page):', error);
   }
   const recQuery = await getDocs(
     collection(firebaseFireStore, 'SaleItems'),

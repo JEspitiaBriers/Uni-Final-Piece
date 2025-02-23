@@ -43,7 +43,6 @@ async function setupFirebase() {
     firebaseAuthentication = getAuth(firebaseApp);
     firebaseFireStore = getFirestore(firebaseApp);
     db = getFirestore(firebaseApp);
-    console.log('Firebase initialized:', firebaseApp);
   } catch (error) {
     console.error('Error fetching Firebase config:', error);
   }
@@ -57,7 +56,6 @@ const updateFirebaseBasket = async (userId, updatedQuantities) => {
   try {
     const basketRef = doc(db, 'Users', userId); // Adjust if needed
     await updateDoc(basketRef, { Basket: updatedQuantities });
-    console.log('Basket updated in Firebase:', updatedQuantities);
   } catch (error) {
     console.error('Error updating basket:', error);
   }
