@@ -3,6 +3,8 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
+//prevents CORS error -- Note that in a released version,
+//CORS security methods would need updating
 app.use(
   cors({
     origin: 'http://localhost:5173'
@@ -31,52 +33,4 @@ app.get('/firebase/apiKeys', (req, res) => {
   });
 });
 
-// app.get('/firebase/apiKey', (req, res) => {
-//   res.send(process.env.FIREBASE_API_KEY);
-// });
-
-// app.get('/firebase/authDomain', (req, res) => {
-//   res.send(process.env.FIREBASE_AUTH_DOMAIN);
-// });
-
-// app.get('/firebase/projectID', (req, res) => {
-//   res.send(process.env.FIREBASE_PROJECT_ID);
-// });
-
-// app.get('/firebase/storageBucket', (req, res) => {
-//   res.send(process.env.FIREBASE_STORAGE_BUCKET);
-// });
-
-// app.get('/firebase/messagingSenderID', (req, res) => {
-//   res.send(process.env.FIREBASE_MESSAGING_SENDER_ID);
-// });
-
-// app.get('/firebase/appID', (req, res) => {
-//   res.send(process.env.FIREBASE_APP_ID);
-// });
-
 app.listen(4242, () => console.log('Node server listening on port 4242!'));
-
-// const calculateOrderAmount = (items) => {
-//   // Replace this constant with a calculation of the order's amount
-//   // Calculate the order total on the server to prevent
-//   // people from directly manipulating the amount on the client
-//   return 1400;
-// };
-
-// app.post('/create-payment-intent', async (req, res) => {
-//   const { items } = req.body;
-
-//   // Create a PaymentIntent with the order amount and currency
-//   const paymentIntent = await stripe.paymentIntents.create({
-//     amount: calculateOrderAmount(items),
-//     currency: 'gbp',
-//     automatic_payment_methods: {
-//       enabled: true
-//     }
-//   });
-
-//   res.send({
-//     clientSecret: paymentIntent.client_secret
-//   });
-// });

@@ -27,31 +27,32 @@ import {
 
 import axios from 'axios';
 
-let firebaseApp;
-axios
-  .get('http://localhost:4242/firebase/apiKeys')
-  .then((response) => {
-    firebaseApp = initializeApp(response.data);
-  })
-  .catch((error) => {});
+let firebaseApp = null;
+let firebaseAuthentication = null;
+let firebaseFireStore = null;
+let db = null;
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: 'AIzaSyAIkHX4tM7zI3w8uR3L65fPJoantLRHF2A',
-  authDomain: 'dissertation-demo-67421.firebaseapp.com',
-  projectId: 'dissertation-demo-67421',
-  storageBucket: 'dissertation-demo-67421.firebasestorage.app',
-  messagingSenderId: '219533248900',
-  appId: '1:219533248900:web:35e88c3d5a924c4d37f5d1'
-};
+//requests firebase keys from server
+async function setupFirebase() {
+  try {
+    const response = await axios.get('http://localhost:4242/firebase/apiKeys');
+    const firebaseConfig = response.data;
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const firebaseAuthentication = getAuth();
-const firebaseFireStore = getFirestore();
-const timestamp = serverTimestamp();
-const db = getFirestore(app);
+    // Initialize Firebase
+    firebaseApp = initializeApp(firebaseConfig);
+    firebaseAuthentication = getAuth(firebaseApp);
+    firebaseFireStore = getFirestore(firebaseApp);
+    db = getFirestore(firebaseApp);
+    console.log('Firebase initialized:', firebaseApp);
+  } catch (error) {
+    console.error('Error fetching Firebase config:', error);
+  }
+}
 
+//waits for firebase to complete setup
+await setupFirebase();
+
+//when user changes values of thier basket
 const updateFirebaseBasket = async (userId, updatedQuantities) => {
   try {
     const basketRef = doc(db, 'Users', userId); // Adjust if needed
@@ -59,6 +60,12 @@ const updateFirebaseBasket = async (userId, updatedQuantities) => {
     console.log('Basket updated in Firebase:', updatedQuantities);
   } catch (error) {
     console.error('Error updating basket:', error);
+  }
+};
+
+const getFirebaseServices = () => {
+  if (!firebaseApp) {
+    throw new Error('Firebase has not been initialized yet');
   }
 };
 
@@ -74,7 +81,6 @@ export {
   updatePassword,
   sendPasswordResetEmail,
   firebaseFireStore,
-  timestamp,
   collection,
   onSnapshot,
   serverTimestamp,
